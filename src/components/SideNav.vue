@@ -1,30 +1,12 @@
 <script>
-// import { storeToRefs } from 'pinia'
-
 import { useTagStore } from '@/stores/tag.js'
 import { useLanguageStore } from '@/stores/language.js'
-// import { useSnippetStore } from '@/stores/snippet.js'
-
-// import SnippetCreateForm from '@/components/SnippetCreateForm.vue'
-
-// const tagStore = useTagStore();
-// const languageStore = useLanguageStore();
-// const snippetStore = useSnippetStore();
-
-// const { tags } = storeToRefs(useTagStore());
-// const { languages } = storeToRefs(useLanguageStore());
-
-// tagStore.fetchTags();
-// languageStore.fetchLanguages();
+import SnippetCreateEditForm from '@/components/SnippetCreateEditForm.vue'
 
 export default {
 	setup(){
 		const tagStore = useTagStore();
 		const languageStore = useLanguageStore();
-		// const snippetStore = useSnippetStore();
-
-		// const { tags } = storeToRefs(useTagStore());
-		// const { languages } = storeToRefs(useLanguageStore());
 
 		tagStore.fetchTags();
 		languageStore.fetchLanguages();
@@ -35,21 +17,20 @@ export default {
 	},
 	data() {
 		return {}
+	},
+	components: {
+		SnippetCreateEditForm
 	}
 }
 </script>
 
 <template>
-	<!-- <div>
-		<div>{{tags}}</div>
-		<div>{{languages}}</div>
-	</div> -->
-
 	<div class="flex-shrink-0 p-3 bg-white" style="width: 280px;">
 		<div class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
 			<span class="fs-5 fw-semibold">Personnal Library</span>
 			<button @click="snippetStore.fetchSnippets()">Refresh</button>
-			<!-- <SnippetCreateForm/> -->
+			<b-button v-b-modal.modal-scrollable.modal-xl.modal-create-form>New snippet</b-button>
+			<SnippetCreateEditForm id="modal-create-form"/>
 		</div>
 		<ul class="list-unstyled ps-0">
 			<li class="mb-1">

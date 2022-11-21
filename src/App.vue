@@ -1,6 +1,8 @@
 <script>
 import SideNav from './components/SideNav.vue'
 import SortByList from './components/SortByList.vue'
+import SnippetSearch from './components/SnippetSearch.vue'
+import SnippetSingle from './components/SnippetSingle.vue'
 
 export default {
 	data() {
@@ -10,7 +12,9 @@ export default {
 	},
 	components: {
 		SideNav,
-		SortByList
+		SortByList,
+		SnippetSearch,
+		SnippetSingle
 	}
 }
 </script>
@@ -19,10 +23,9 @@ export default {
 	<div v-fragments>
 		<SideNav/>
 		<SortByList/>
-
-		<!-- <div>
-			<Search/>
-			<Snippet/>
-		</div> -->
+		<div>
+			<SnippetSearch/>
+			<SnippetSingle/>
+		</div>
 	</div>
 </template>
