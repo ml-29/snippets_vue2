@@ -3,6 +3,7 @@ import SideNav from './components/SideNav.vue'
 import SortByList from './components/SortByList.vue'
 import SnippetSearch from './components/SnippetSearch.vue'
 import SnippetSingle from './components/SnippetSingle.vue'
+import LoginMenu from './components/LoginMenu.vue'
 
 export default {
 	data() {
@@ -14,7 +15,8 @@ export default {
 		SideNav,
 		SortByList,
 		SnippetSearch,
-		SnippetSingle
+		SnippetSingle,
+		LoginMenu
 	}
 }
 </script>
@@ -24,6 +26,7 @@ export default {
 		<SideNav/>
 		<SortByList/>
 		<div>
+			<LoginMenu/>
 			<SnippetSearch/>
 			<SnippetSingle/>
 		</div>
