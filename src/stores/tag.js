@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
+import Vue from 'vue'
 
 export const useTagStore = defineStore('tag', {
 	state: () => {
@@ -17,12 +17,16 @@ export const useTagStore = defineStore('tag', {
 	},
 	actions: {
 		async fetchTags() {
-			axios
-				.get('http://localhost:3000/tags')
-				.then((response) => {
-					this.tags = response.data;
-
-				})
+			try{
+				var response = await Vue.prototype.$http.get('/tags');
+				this.tags = response.data;
+				return true;
+			}catch{
+				return false;
+			}
+		},
+		resetTags(){
+			this.tags = [];
 		}
 	}
 })

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
+// import axios from 'axios'
+import Vue from 'vue'
 
 export const useLanguageStore = defineStore('language', {
 	state: () => {
@@ -9,11 +10,16 @@ export const useLanguageStore = defineStore('language', {
 	},
 	actions: {
 		async fetchLanguages() {
-			axios
-				.get('http://localhost:3000/languages')
-				.then((response) => {
-					this.languages = response.data;
-				})
+			try{
+				var response = await Vue.prototype.$http
+				.get('/languages');
+				this.languages = response.data;
+			}catch{
+				return false;
+			}
+		},
+		resetLanguages(){
+			this.languages = [];
 		}
 	}
 })

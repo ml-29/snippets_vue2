@@ -26,8 +26,10 @@ export default {
 		<SideNav/>
 		<SortByList/>
 		<div>
-			<LoginMenu/>
-			<SnippetSearch/>
+			<b-row>
+				<SnippetSearch/>
+				<LoginMenu/>
+			</b-row>
 			<SnippetSingle/>
 		</div>
 	</div>

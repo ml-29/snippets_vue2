@@ -21,3 +21,7 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+.env.development
+*.sqlite
+*.sqlite-journal
+*.sqlite-journal

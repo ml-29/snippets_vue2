@@ -1,27 +1,14 @@
 <script>
-// import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useSnippetStore } from '@/stores/snippet.js'
 
 export default {
 	setup(){
-		const store = useSnippetStore();
-		const { selectedSnippet } = storeToRefs(store);
+		const snippetStore = useSnippetStore();
+		const { selectedSnippet } = storeToRefs(snippetStore);
 		const { fetchSnippets } = useSnippetStore();
-
-		// const sortMethods = ref({
-		// 	'Recently Created' : 'sortListByRecentlyCreated',
-		// 	'Last Updated' : 'sortListByLastUpdated',
-		// 	'Title' : 'sortListByTitle'
-		// });
-
-		fetchSnippets();
-
-		// const selectedSortMethod = ref(Object.keys(sortMethods.value)[0]);
-		// const sortedList = computed(() => {
-		// 	return store[sortMethods.value[selectedSortMethod.value]];
-		// });
-		return { store, selectedSnippet };
+		
+		return { snippetStore, selectedSnippet };
 	},
 	data() {
 		return {
@@ -34,11 +21,11 @@ export default {
 		}
 	},
 	created(){
-       this.selectedSortMethod = Object.keys(this.sortMethods)[0];
-    },
+    this.selectedSortMethod = Object.keys(this.sortMethods)[0];
+  },
 	computed: {
 		sortedList(){
-			return this.store[this.sortMethods[this.selectedSortMethod]];
+			return this.snippetStore[this.sortMethods[this.selectedSortMethod]];
 		}
 	}
 }

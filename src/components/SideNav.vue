@@ -10,8 +10,8 @@ export default {
 		const tagStore = useTagStore();
 		const languageStore = useLanguageStore();
 
-		tagStore.fetchTags();
-		languageStore.fetchLanguages();
+		// tagStore.fetchTags();
+		// languageStore.fetchLanguages();
 		return {
 			snippetStore,
 			tagStore,
@@ -42,7 +42,6 @@ export default {
 		filterByLanguage(language){
 			this.snippetStore.filterSnippetsByTag(language);
 		}
-
 	},
 	components: {
 		SnippetCreateEditForm
@@ -62,16 +61,19 @@ export default {
 			<li class="mb-1">
 				<button class="btn align-items-center rounded" @click="displayAllSnippets">
 					All snippets
+					<b-badge pill variant="primary" class="rounded-pill">{{ snippetStore.getNbSnippets }}</b-badge>
 				</button>
 			</li>
 			<li class="mb-1">
 				<button class="btn align-items-center rounded" @click="filterByStarred">
 					Starred
+					<b-badge pill variant="primary" class="rounded-pill">{{ snippetStore.getNbStarred }}</b-badge>
 				</button>
 			</li>
 			<li class="mb-1">
 				<button class="btn align-items-center rounded" @click="filterByUnlabeled">
 					Unlabeled
+					<b-badge pill variant="primary" class="rounded-pill">{{ snippetStore.getNbUnlabeled }}</b-badge>
 				</button>
 			</li>
 			<li class="mb-1">
@@ -79,7 +81,10 @@ export default {
 				<b-collapse id="collapse-tag" visible class="mt-2">
 					<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
 						<li v-for="tag in tagStore.tags" :key="tag.id">
-							<a href="#" class="link-dark rounded" @click="filterByTag(tag.name)">{{tag.name}}</a>
+							<a href="#" class="link-dark rounded" @click="snippetStore.filterByTag(tag.name)">
+								{{tag.name}}
+							</a>
+							<b-badge pill variant="primary" class="rounded-pill">{{ tag.nbSnippets }}</b-badge>
 						</li>
 					</ul>
 				</b-collapse>
@@ -89,7 +94,10 @@ export default {
 				<b-collapse id="collapse-language" visible class="mt-2">
 					<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
 						<li v-for="language in languageStore.languages" :key="language.id">
-							<a href="#" class="link-dark rounded" @click="filterByLanguage(language.name)">{{language.name}}</a>
+							<a href="#" class="link-dark rounded" @click="snippetStore.filterByLanguage(language.name)">
+								{{language.name}}
+							</a>
+							<b-badge pill variant="primary" class="rounded-pill">{{ language.nbSnippets }}</b-badge>
 						</li>
 					</ul>
 				</b-collapse>
