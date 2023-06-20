@@ -25,3 +25,6 @@ pnpm-debug.log*
 *.sqlite
 *.sqlite-journal
 *.sqlite-journal
+.vs/slnx.sqlite
+.vs/slnx.sqlite-journal
+*.sqlite-journal
