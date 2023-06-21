@@ -43,10 +43,7 @@ export default {
 		async handleLogin(){
 			var success = await this.accountStore.loginWithPassword(this.loginUsername, this.loginPassword);
 			if(success){
-				this.snippetStore.fetchSnippets();
-				this.tagStore.fetchTags();
-				this.languageStore.fetchLanguages();
-				this.closeForm();
+				this.refreshAppData();
 			}else{
 				this.resetAppData();
 			}
@@ -54,10 +51,7 @@ export default {
 		async handleSignUp(){
 			var success = await this.accountStore.signUpWithPassword(this.signUpUsername, this.signUpPassword, this.signUpEmail);
 			if(success){
-				this.snippetStore.fetchSnippets();
-				this.tagStore.fetchTags();
-				this.languageStore.fetchLanguages();
-				this.closeForm();
+				this.refreshAppData();
 			}else{
 				this.resetAppData();
 			}
@@ -69,13 +63,14 @@ export default {
 			}
 		},
 		resetAppData(){
-			console.log('resetAppData');
 			this.snippetStore.resetSnippets();
 			this.tagStore.resetTags();
 			this.languageStore.resetLanguages();
 		},
-		closeForm(){
-			this.$refs.modal.hide();
+		refreshAppData(){
+			this.snippetStore.fetchSnippets();
+			this.tagStore.fetchTags();
+			this.languageStore.fetchLanguages();
 		}
 	}
 }

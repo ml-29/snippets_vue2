@@ -16,7 +16,6 @@ export const useAccountStore = defineStore('account', {
 	},
 	actions: {
 		async loginWithPassword(username, password){
-			console.log('loginWithPassword');
 			try {
 				var response = await Vue.prototype.$http.post('/login', {
 					username: username,
@@ -31,7 +30,6 @@ export const useAccountStore = defineStore('account', {
 			}
 		},
 		async signUpWithPassword(username, password, email){
-			console.log('signup with password');
 			try {
 				var response = await Vue.prototype.$http.post('/sign-up', {
 					username: username,
@@ -39,12 +37,10 @@ export const useAccountStore = defineStore('account', {
 					email: email
 				});
 				this.user = response.data.user;
-				console.log(response.data.user);
 				this.loggedIn = true;
 				Vue.prototype.$http.defaults.params = { token: response.data.token};
 				return true;
 			}catch(error){
-				console.log(error);
 				return false;
 			}
 		},
@@ -57,7 +53,6 @@ export const useAccountStore = defineStore('account', {
 					this.user = response.data.user;
 					this.loggedIn = true;
 					Vue.prototype.$http.defaults.params = { token: response.data.token};
-					console.log('Logged in with github ! ');
 					return true;
 				}catch{
 					return false;
@@ -69,7 +64,6 @@ export const useAccountStore = defineStore('account', {
 		},
 		async logout(){
 			try{
-				console.log('logging out');
 				var response = await Vue.prototype.$http.post('/logout/' + this.user.id);
 				this.user = {};
 				this.loggedIn = false;
