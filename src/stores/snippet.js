@@ -137,7 +137,7 @@ export const useSnippetStore = defineStore('snippet', {
 				snippet.title.toLowerCase().includes(s.toLowerCase())
 			);
 		},
-		filterByTag(tagName){
+		filterSnippetsByTag(tagName){
 			// this.list = this.filteredByTag(tagName);
 			const tn = tagName;
 			this.list = this.snippets;
@@ -147,7 +147,7 @@ export const useSnippetStore = defineStore('snippet', {
 				});
 			});
 		},
-		filterByLanguage(languageName){
+		filterSnippetsByLanguage(languageName){
 			// this.list = this.filteredByLanguage(languageName);
 			const ln = languageName;
 			this.list = this.snippets;
@@ -157,14 +157,14 @@ export const useSnippetStore = defineStore('snippet', {
 				});
 			});
 		},
-		filterByUnlabeled(){
+		filterSnippetsByUnlabeled(){
 			// this.list = this.fileteredByUnlabeled();
 			this.list = this.snippets;
 			this.list = this.list.filter((snippet) => {
 				return snippet.tags.length == 0;
 			});
 		},
-		filterByStarred(){
+		filterSnippetsByStarred(){
 			// this.list = this.filteredByStarred();
 			this.list = this.snippets;
 			this.list = this.list.filter((snippet) => {

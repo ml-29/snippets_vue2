@@ -40,7 +40,7 @@ export default {
 			this.snippetStore.filterSnippetsByTag(tag);
 		},
 		filterByLanguage(language){
-			this.snippetStore.filterSnippetsByTag(language);
+			this.snippetStore.filterSnippetsByLanguage(language);
 		}
 	},
 	components: {
@@ -81,7 +81,7 @@ export default {
 				<b-collapse id="collapse-tag" visible class="mt-2">
 					<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
 						<li v-for="tag in tagStore.tags" :key="tag.id">
-							<a href="#" class="link-dark rounded" @click="snippetStore.filterByTag(tag.name)">
+							<a href="#" class="link-dark rounded" @click="filterByTag(tag.name)">
 								{{tag.name}}
 							</a>
 							<b-badge pill variant="primary" class="rounded-pill">{{ tag.nbSnippets }}</b-badge>
@@ -94,7 +94,7 @@ export default {
 				<b-collapse id="collapse-language" visible class="mt-2">
 					<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
 						<li v-for="language in languageStore.languages" :key="language.id">
-							<a href="#" class="link-dark rounded" @click="snippetStore.filterByLanguage(language.name)">
+							<a href="#" class="link-dark rounded" @click="filterByLanguage(language.name)">
 								{{language.name}}
 							</a>
 							<b-badge pill variant="primary" class="rounded-pill">{{ language.nbSnippets }}</b-badge>
