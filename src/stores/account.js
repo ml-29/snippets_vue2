@@ -15,7 +15,28 @@ export const useAccountStore = defineStore('account', {
 		}
 	},
 	actions: {
-		async loginWithPassword(username, password){
+		setToken(token){
+			Vue.prototype.$http.defaults.params = { token: token };
+		},
+		rememberUserLoggedIn(token){
+			Vue.prototype.$cookies.set("token", token);
+		},
+		async fetchAccount(){
+			try{
+				var response = await Vue.prototype.$http.get('/user');
+				this.user = response.data.user;
+				this.loggedIn = true;
+				return true;
+			}catch{
+				return false;
+			}
+		},
+		resetAccount(){
+			this.user = {};
+			this.loggedIn = false;
+			this.setToken(undefined);
+		},
+		async loginWithPassword(username, password, rememberMe){
 			try {
 				var response = await Vue.prototype.$http.post('/login', {
 					username: username,
@@ -23,13 +44,16 @@ export const useAccountStore = defineStore('account', {
 				});
 				this.user = response.data.user;
 				this.loggedIn = true;
-				Vue.prototype.$http.defaults.params = { token: response.data.token};
+				this.setToken(response.data.token);
+				if(rememberMe){
+					this.rememberUserLoggedIn(response.data.token);
+				}
 				return true;
 			}catch(error){
 				return false;
 			}
 		},
-		async signUpWithPassword(username, password, email){
+		async signUpWithPassword(username, password, email, rememberMe){
 			try {
 				var response = await Vue.prototype.$http.post('/sign-up', {
 					username: username,
@@ -38,9 +62,21 @@ export const useAccountStore = defineStore('account', {
 				});
 				this.user = response.data.user;
 				this.loggedIn = true;
-				Vue.prototype.$http.defaults.params = { token: response.data.token};
+				this.setToken(response.data.token);
+				if(rememberMe){
+					this.rememberUserLoggedIn(response.data.token);
+				}
 				return true;
 			}catch(error){
+				return false;
+			}
+		},
+		async logout(){
+			try{
+				var response = await Vue.prototype.$http.post('/logout/' + this.user.id);
+				//this.resetAccount();
+				return true;
+			}catch{
 				return false;
 			}
 		},
@@ -52,7 +88,9 @@ export const useAccountStore = defineStore('account', {
 					
 					this.user = response.data.user;
 					this.loggedIn = true;
-					Vue.prototype.$http.defaults.params = { token: response.data.token};
+					this.setToken(response.data.token);
+					// TODO : remove github param from page URL
+					// Vue.prototype.$http.defaults.params = { token: response.data.token };
 					return true;
 				}catch{
 					return false;
@@ -60,25 +98,17 @@ export const useAccountStore = defineStore('account', {
 			}
 		},
 		async checkLogin(){
-			//TODO
-		},
-		async logout(){
-			try{
-				var response = await Vue.prototype.$http.post('/logout/' + this.user.id);
-				this.user = {};
-				this.loggedIn = false;
-				this.token = '';
-				Vue.prototype.$http.defaults.params['token'] = undefined;
-				return true;
-			}catch{
-				return false;
+			var cookieToken = Vue.prototype.$cookies.get("token");
+			if(cookieToken){
+				this.setToken(cookieToken);
+				Vue.prototype.$http.defaults.params['token'] = cookieToken;
 			}
 		}
 	},
 	getters: {
 		githubState: (state) => {
 			if(!Vue.prototype.$cookies.get("state")){//if cookie does not exist, set it
-				Vue.prototype.$cookies.set("state", cryptoRandomString({length: 40}))
+				Vue.prototype.$cookies.set("state", cryptoRandomString({length: 40}));
 			}
 			return Vue.prototype.$cookies.get("state");
 		},

@@ -12,8 +12,6 @@ export default {
 		const tagStore = useTagStore();
 		const languageStore = useLanguageStore();
 		
-		accountStore.checkGithubLogin();
-		
 		return { accountStore, snippetStore, tagStore, languageStore };
 	},
 	data() {
@@ -27,8 +25,13 @@ export default {
 			signUpEmail: process.env.VUE_APP_DEFAULT_SIGNUP_EMAIL || '',
 			signUpUsername: process.env.VUE_APP_DEFAULT_SIGNUP_USERNAME || '',
 			signUpPassword: process.env.VUE_APP_DEFAULT_SIGNUP_PASSWORD || '',
-			signUpRememberMe: true
+			signUpRememberMe: false
 		}
+	},
+	created(){
+		this.accountStore.checkGithubLogin();
+		this.accountStore.checkLogin();
+		this.refreshAppData();
 	},
 	computed: {
 		username(){
@@ -36,12 +39,11 @@ export default {
 		},
 		avatarUrl(){
 			return this.accountStore.user.avatar || this.accountStore.user?.githubProfile?.avatar_url || 'https://placehold.co/300/300';
-			// return this.accountStore.user.avatar || this.accountStore.user?.githubProfile.avatar_url || 'https://placehold.co/300/300';
 		}
 	},
 	methods: {
 		async handleLogin(){
-			var success = await this.accountStore.loginWithPassword(this.loginUsername, this.loginPassword);
+			var success = await this.accountStore.loginWithPassword(this.loginUsername, this.loginPassword, this.loginRememberMe);
 			if(success){
 				this.refreshAppData();
 			}else{
@@ -49,7 +51,7 @@ export default {
 			}
 		},
 		async handleSignUp(){
-			var success = await this.accountStore.signUpWithPassword(this.signUpUsername, this.signUpPassword, this.signUpEmail);
+			var success = await this.accountStore.signUpWithPassword(this.signUpUsername, this.signUpPassword, this.signUpEmail, this.signUpRememberMe);
 			if(success){
 				this.refreshAppData();
 			}else{
@@ -66,20 +68,20 @@ export default {
 			this.snippetStore.resetSnippets();
 			this.tagStore.resetTags();
 			this.languageStore.resetLanguages();
+			this.accountStore.resetAccount();
 		},
 		refreshAppData(){
 			this.snippetStore.fetchSnippets();
 			this.tagStore.fetchTags();
 			this.languageStore.fetchLanguages();
+			this.accountStore.fetchAccount();
 		}
 	}
 }
 </script>
 <template>
 	<div>
-		<!-- <span v-if="accountStore.user.loggedIn">Logged in as: {{accountStore.user.githubProfile.login}}</span> -->
-		<!-- <b-img right rounded="circle" alt="user profile picture" v-if="accountStore.user.loggedIn" :src="accountStore.user.githubProfile.avatar_url" class="profile-pic"></b-img> -->
-		
+
 		<div v-if="!accountStore.loggedIn">
 			<b-button id="show-btn" @click="$bvModal.show('sign-in-modal')">Login</b-button>
 			
@@ -116,11 +118,7 @@ export default {
 							<b-row align-h="between" class="mt-2">
 								<b-col cols="4">
 									<b-form-checkbox
-										id="checkbox-1"
 										v-model="loginRememberMe"
-										name="checkbox-1"
-										value="accepted"
-										unchecked-value="not_accepted"
 									>
 										Remember me
 									</b-form-checkbox>
@@ -209,11 +207,7 @@ export default {
 							<b-row align-h="between" class="mt-2">
 								<b-col cols="4">
 									<b-form-checkbox
-										id="checkbox-1"
 										v-model="signUpRememberMe"
-										name="checkbox-1"
-										value="accepted"
-										unchecked-value="not_accepted"
 									>
 										Remember me
 									</b-form-checkbox>
