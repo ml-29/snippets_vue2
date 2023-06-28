@@ -47,50 +47,6 @@ export const useSnippetStore = defineStore('snippet', {
 			var unlabeledSnippets = state.snippets.filter((s) => s.tags.length == 0);
 			return unlabeledSnippets.length;
 		}
-		// filteredByTag(tagName){
-		// 	// const tn = tagName;
-		// 	// var list = this.snippets;
-		// 	// list = list.filter((snippet) => {
-		// 	// 	console.log(tagName);
-		// 	// 	return snippet.tags.some((tag) => {
-		// 	// 		return tag.name.toLowerCase().includes(tagName.toLowerCase());
-		// 	// 	});
-		// 	// });
-		// 	// // list = list.filter((snippet) => {
-		// 	// // 	return snippet.tags.some((tag) => {
-		// 	// // 		return tag.name.toLowerCase().includes(tn.toLowerCase());
-		// 	// // 	});
-		// 	// // });
-		// 	// return list;
-		// 	return this.snippets;
-		// },
-		// filteredByLanguage(languageName){
-		// 	// const ln = languageName;
-		// 	// // const list = this.snippets;
-		// 	// var list = this.snippets.filter((snippet) => {
-		// 	// 	return snippet.parts.some((part) => {
-		// 	// 		return part.Language.name.toLowerCase().includes(ln.toLowerCase());
-		// 	// 	});
-		// 	// });
-		// 	// return list;
-		// 	return this.snippets;
-		// },
-		// filteredByUnlabeled(){
-		// 	// // const list = this.snippets;
-		// 	// var list = this.snippets.filter((snippet) => {
-		// 	// 	return snippet.tags.length == 0;
-		// 	// });
-		// 	// return list;
-		// 	return this.snippets;
-		// },
-		// filteredByStarred(){
-		// 	// // const list = this.snippets;
-		// 	// var list = this.snippets.filter((snippet) => {
-		// 	// 	return snippet.starred;
-		// 	// });
-		// 	// return list;
-		// 	return this.snippets;
-		// }
 	},
 	actions: {
 		async fetchSnippets() {

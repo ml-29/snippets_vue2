@@ -84,13 +84,13 @@ export const useAccountStore = defineStore('account', {
 			if(this.githubCode && this.githubState && this.githubState === this.githubReceivedState){
 				try{
 					var response = await Vue.prototype.$http.post('/github-login', { code : this.githubCode });
-					//remove github params from URL
+					
+					Vue.prototype.$cookies.remove("state");
+					this.rememberUserLoggedIn(response.data.token);
 					
 					this.user = response.data.user;
 					this.loggedIn = true;
 					this.setToken(response.data.token);
-					// TODO : remove github param from page URL
-					// Vue.prototype.$http.defaults.params = { token: response.data.token };
 					return true;
 				}catch{
 					return false;

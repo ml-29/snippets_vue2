@@ -181,17 +181,6 @@ export default {
 								</b-input-group>
 							</b-form-group>
 							
-							<!--<b-form-group>-->
-							<!--	<b-input-group>-->
-							<!--		<b-input-group-prepend>-->
-							<!--			<span class="input-group-text">-->
-							<!--				<i class="fa-solid fa-circle-user"></i>-->
-							<!--			</span>-->
-							<!--		</b-input-group-prepend>-->
-							<!--		<b-form-input class="LoginInput" size="lg" placeholder="Email" v-model="email"></b-form-input>-->
-							<!--	</b-input-group>-->
-							<!--</b-form-group>-->
-							
 							<b-form-group>
 								<b-input-group>
 									<b-input-group-prepend>
@@ -252,30 +241,10 @@ export default {
 			<b-dropdown-item href="#" @click="handleLogout">Log out</b-dropdown-item>
 		</b-dropdown>
 		<p v-if="accountStore.loggedIn">{{username}}</p>
-		<p>{{accountStore.user.githubProfile}}</p>
-
-		<!--<pre>{{accountStore.user}}</pre>-->
-
-		<!--<hr>-->
-
-		<!--<form @submit.prevent="handleLogin">-->
-		<!--	<input v-model="username">-->
-		<!--	<input v-model="password">-->
-		<!--	<input type="submit" name="submit" value="Log in with password">-->
-		<!--</form>-->
-
-		<!--<a v-if="!accountStore.user.loggedIn" v-bind:href="'https://github.com/login/oauth/authorize?client_id=' + accountStore.githubClientId + '&redirect_uri=' + accountStore.githubRedirectURI + '&state=' + accountStore.githubState">-->
-		<!--	Log in with Github-->
-		<!--</a>-->
 	</div>
 
 </template>
 <style scoped>
-	/*.profile-pic{*/
-	/*	max-height: 60px;*/
-	/*	max-width: 60px;*/
-	/*}*/
-	
 	.hr-text {
 		line-height: 1em;
 		position: relative;
