@@ -1,26 +1,39 @@
 import { defineStore } from 'pinia'
+import { useGlobalStore } from '@/stores/global.js'
 // import axios from 'axios'
 import cryptoRandomString from 'crypto-random-string'
 import Vue from 'vue'
 
 // import { useSnippetStore } from '@/stores/snippet.js'
+// const globalStore = useGlobalStore();
 
 export const useAccountStore = defineStore('account', {
 	state: () => {
 		return {
 			user: {},
 			loggedIn: false,
+			globalStore: useGlobalStore(),
+			// githubState: Vue.prototype.$cookies.get("state") || null,
 			githubClientId: process.env.VUE_APP_GITHUB_CLIENT_ID,
-			githubRedirectURI: process.env.VUE_APP_GITHUB_REDIRECT_URI
+			githubRedirectURI: process.env.VUE_APP_GITHUB_REDIRECT_URI,
+			// token: Vue.prototype.$cookies.get("token") || sessionStorage.getItem("token") || null
 		}
 	},
 	actions: {
-		setToken(token){
-			Vue.prototype.$http.defaults.params = { token: token };
+		//sets token as default param for all axios requests + saves it as a cookie if requested
+		propagateToken(token, rememberMe){
+			Vue.prototype.$http.defaults.params = { token: token };//save for axios to use with every request
+			sessionStorage.setItem("token", token);//save to session so conexion is not lost between pages
+			if(rememberMe){
+				Vue.prototype.$cookies.set("token", token);
+			}
 		},
-		rememberUserLoggedIn(token){
-			Vue.prototype.$cookies.set("token", token);
-		},
+		// compToken(){
+		// 	return Vue.prototype.$cookies.get("token") || sessionStorage.getItem("token") || null;
+		// },
+		// token(){
+		// 	return Vue.prototype.$cookies.get("token") || sessionStorage.getItem("token") || null;
+		// },
 		async fetchAccount(){
 			try{
 				var response = await Vue.prototype.$http.get('/user');
@@ -34,7 +47,6 @@ export const useAccountStore = defineStore('account', {
 		resetAccount(){
 			this.user = {};
 			this.loggedIn = false;
-			this.setToken(undefined);
 		},
 		async loginWithPassword(username, password, rememberMe){
 			try {
@@ -44,12 +56,11 @@ export const useAccountStore = defineStore('account', {
 				});
 				this.user = response.data.user;
 				this.loggedIn = true;
-				this.setToken(response.data.token);
-				if(rememberMe){
-					this.rememberUserLoggedIn(response.data.token);
-				}
+				this.propagateToken(response.data.token, rememberMe);
+				this.globalStore.refreshAppData();
 				return true;
 			}catch(error){
+				this.globalStore.resetAppData();
 				return false;
 			}
 		},
@@ -62,48 +73,66 @@ export const useAccountStore = defineStore('account', {
 				});
 				this.user = response.data.user;
 				this.loggedIn = true;
-				this.setToken(response.data.token);
-				if(rememberMe){
-					this.rememberUserLoggedIn(response.data.token);
-				}
+				this.propagateToken(response.data.token, rememberMe);
+				this.globalStore.refreshAppData();
 				return true;
 			}catch(error){
+				this.globalStore.resetAppData();
 				return false;
 			}
 		},
 		async logout(){
 			try{
 				var response = await Vue.prototype.$http.post('/logout/' + this.user.id);
-				//this.resetAccount();
+				
+				//remove token from everywhere
+				Vue.prototype.$http.defaults.params = { token: undefined };
+				sessionStorage.removeItem("token");
+				Vue.prototype.$cookies.remove("token");
+				
+				this.globalStore.resetAppData();
 				return true;
 			}catch{
 				return false;
 			}
 		},
-		async checkGithubLogin() {
-			if(this.githubCode && this.githubState && this.githubState === this.githubReceivedState){
+		async loginWithGithub(code, state) {
+			if(code && state && this.githubState === state){
 				try{
-					var response = await Vue.prototype.$http.post('/github-login', { code : this.githubCode });
-					
 					Vue.prototype.$cookies.remove("state");
-					this.rememberUserLoggedIn(response.data.token);
 					
-					this.user = response.data.user;
-					this.loggedIn = true;
-					this.setToken(response.data.token);
+					var response = await Vue.prototype.$http.post('/github-login', { code : code });
+					this.propagateToken(response.data.token, true);
+
+					this.globalStore.refreshAppData();
 					return true;
 				}catch{
+					this.globalStore.resetAppData();
 					return false;
 				}
+			}else{
+				return false;
 			}
 		},
-		async checkLogin(){
-			var cookieToken = Vue.prototype.$cookies.get("token");
-			if(cookieToken){
-				this.setToken(cookieToken);
-				Vue.prototype.$http.defaults.params['token'] = cookieToken;
+		async isAuthenticated(){
+			//quick fix: token computed here instead of using a getter because getter is not always up to date, reason unknown
+			var token = Vue.prototype.$cookies.get("token") || sessionStorage.getItem("token") || null;
+			if(token){
+				this.propagateToken(token, false);
+				var res = await this.fetchAccount();
+				return res;
 			}
-		}
+			return false;
+		},
+		// setGithubState(){
+		// 	var cookie = Vue.prototype.$cookies.get("state");
+		// 	if(!cookie){
+		// 		var st = cryptoRandomString({length: 40});
+		// 		Vue.prototype.$cookies.set("state", st);
+		// 		return st;
+		// 	}
+		// 	return cookie;
+		// }
 	},
 	getters: {
 		githubState: (state) => {
@@ -112,15 +141,8 @@ export const useAccountStore = defineStore('account', {
 			}
 			return Vue.prototype.$cookies.get("state");
 		},
-		githubReceivedState: (state) => {
-			var uri = window.location.search.substring(1);
-			var params = new URLSearchParams(uri);
-			return params.get('state');
-		},
-		githubCode: (state) => {
-			var uri = window.location.search.substring(1);
-			var params = new URLSearchParams(uri);
-			return params.get('code');
-		}
+		// token: (state) => {
+		// 	return Vue.prototype.$cookies.get("token") || sessionStorage.getItem("token") || null;
+		// }
 	}
 })
