@@ -12,8 +12,6 @@ import '@fortawesome/fontawesome-free/js/all.js'
 import App from '@/App.vue'
 
 import './assets/main.scss'
-import './assets/sidenavs.css'
-import './assets/sidebars.js'
 
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
@@ -26,6 +24,37 @@ const pinia = createPinia()
 Axios.defaults.baseURL = 'http://localhost:3000';
 
 Vue.prototype.$http = Axios;
+
+import moment from 'moment';
+
+Vue.filter('completeDateHour', function(value) {
+	if(value) {
+		return moment(String(value)).format('M/D/YY, h:mm A');
+	}
+});
+
+Vue.filter('miniDateTimeAgo', function(value) {
+	if(value) {
+		var nbSeconds = moment(new Date()).diff(moment(String(value)), 'seconds');
+		var nbMinutes = moment(new Date()).diff(moment(String(value)), 'minutes');
+		var nbHours = moment(new Date()).diff(moment(String(value)), 'hours');
+		var nbDays = moment(new Date()).diff(moment(String(value)), 'days');
+		var nbYears = moment(new Date()).diff(moment(String(value)), 'years');
+	
+		if(nbDays < 1){
+			if(nbMinutes < 1){//less than a minute ago, return <1m
+				return '<1m';
+			}else if(nbHours < 1){//less than an hour ago, return nb of minutes
+				return nbMinutes + 'm';
+			}else{//more than an hour, return nb of hours
+				return nbHours + 'h';
+			}
+		}else if(nbYears < 1){//less than a year ago, return month/day
+			return moment(String(value)).format('M/D');
+		}//more than a year ago, return nb years
+		return nbYears + 'y';
+	}
+});
 
 import LoginPage from './components/LoginPage.vue'
 import NotFoundPage from './components/NotFoundPage.vue'
@@ -85,7 +114,6 @@ const routes = [
 			}
 		
   },
-  
   { name: 'not-found', path: '/not-found', component: NotFoundPage },
   { path: '*', redirect: '/not-found'}
 ]

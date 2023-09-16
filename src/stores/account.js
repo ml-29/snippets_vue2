@@ -1,11 +1,7 @@
 import { defineStore } from 'pinia'
 import { useGlobalStore } from '@/stores/global.js'
-// import axios from 'axios'
 import cryptoRandomString from 'crypto-random-string'
 import Vue from 'vue'
-
-// import { useSnippetStore } from '@/stores/snippet.js'
-// const globalStore = useGlobalStore();
 
 export const useAccountStore = defineStore('account', {
 	state: () => {
@@ -28,12 +24,6 @@ export const useAccountStore = defineStore('account', {
 				Vue.prototype.$cookies.set("token", token);
 			}
 		},
-		// compToken(){
-		// 	return Vue.prototype.$cookies.get("token") || sessionStorage.getItem("token") || null;
-		// },
-		// token(){
-		// 	return Vue.prototype.$cookies.get("token") || sessionStorage.getItem("token") || null;
-		// },
 		async fetchAccount(){
 			try{
 				var response = await Vue.prototype.$http.get('/user');
@@ -123,16 +113,7 @@ export const useAccountStore = defineStore('account', {
 				return res;
 			}
 			return false;
-		},
-		// setGithubState(){
-		// 	var cookie = Vue.prototype.$cookies.get("state");
-		// 	if(!cookie){
-		// 		var st = cryptoRandomString({length: 40});
-		// 		Vue.prototype.$cookies.set("state", st);
-		// 		return st;
-		// 	}
-		// 	return cookie;
-		// }
+		}
 	},
 	getters: {
 		githubState: (state) => {
@@ -141,8 +122,19 @@ export const useAccountStore = defineStore('account', {
 			}
 			return Vue.prototype.$cookies.get("state");
 		},
-		// token: (state) => {
-		// 	return Vue.prototype.$cookies.get("token") || sessionStorage.getItem("token") || null;
-		// }
+		username: (state) => (user) => {
+			return user.username || user.githubProfile.login;
+		},
+		initials: (state) => (user) => {
+			var names = user.username.split(' '), initials = names[0].substring(0, 1).toUpperCase();
+			
+			if (names.length > 1) {
+				initials += names[names.length - 1].substring(0, 1).toUpperCase();
+			}
+			return initials;
+		},
+		avatarUrl: (state) => (user) => {
+			return user.avatar || user?.githubProfile?.avatar_url || 'https://placehold.co/300/300';
+		}
 	}
 })

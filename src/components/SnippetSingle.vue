@@ -3,10 +3,14 @@ import { storeToRefs } from 'pinia';
 import { useSnippetStore } from '@/stores/snippet.js';
 
 import SnippetCreateEditForm from '@/components/SnippetCreateEditForm.vue'
+import CodeHighlighter from '@/components/CodeHighlighter.vue'
+import VueMarkdown from 'vue-markdown-render'
 
 export default {
 	components : {
-		SnippetCreateEditForm
+		SnippetCreateEditForm,
+		CodeHighlighter,
+		VueMarkdown
 	},
 	setup(){
 		const snippetStore = useSnippetStore();
@@ -25,34 +29,138 @@ export default {
 </script>
 
 <template>
-	<div>
+	<b-col class="bg-light" align-self="stretch">
 		<template v-if="selectedSnippet">
-			<b-button v-b-modal.modal-scrollable.modal-xl.modal-edit-form>Edit Snippet</b-button>
-			<SnippetCreateEditForm id="modal-edit-form" :snippet="selectedSnippet"/>
-			<button @click="deleteSnippet(selectedSnippet.id)">Delete</button>
-
-			<h2>{{selectedSnippet.title}}</h2>
-			<div>
-				{{selectedSnippet.description}}
-			</div>
-			<div>
-				{{selectedSnippet.preview}}
-			</div>
-			<span v-for="tag in selectedSnippet.tags" :key="tag.name">
-				{{tag.name}}
-			</span>
-			<div v-for="part in selectedSnippet.parts" :key="part.id">
-				<span>{{part.title}}</span>
-				<pre :class="part.Language.name">
-					<code>
-						{{part.content}}
-					</code>
-				</pre>
-				</div>
+			<b-row class="bg-white p-3" align-h="between">
+				<b-col cols="auto">
+					<b-row>
+						<b-col cols="auto" class="p-0 pr-3">
+							<b-col id="btn-star" class="text-gray cursor-on-hover text-center" :class="{ 'text-yellow' : selectedSnippet.starred }">
+								<i class="fa-solid fa-star"></i>
+							</b-col>
+							<b-col v-if="selectedSnippet.private" class="text-darker text-center">
+								<i class="fa-solid fa-lock"></i>
+							</b-col>
+						</b-col>
+						
+						<b-col>
+							<b-row style="font-size: 1.2em;"><b>{{selectedSnippet.title}}</b></b-row>
+							<b-row id="guid" class="cursor-on-hover text-darker mb-2">
+								<b>guid : {{selectedSnippet.id}}</b>
+								&nbsp;<i id="copy-icon" class="fa-solid fa-copy"></i>
+							</b-row>
+							<b-row style="font-size: 0.8em;"><b>{{selectedSnippet.User.username}}</b><span class="cursor-on-hover text-darker">&nbsp;- {{selectedSnippet.createdAt | completeDateHour }}</span></b-row>
+						</b-col>
+					</b-row>
+				</b-col>
+				
+				<b-col cols="auto">
+					<b-row align-h="end">
+						<b-col cols="auto" class="p-1">
+							<span id="edit-btn" v-b-modal.modal-scrollable.modal-xl.modal-edit-form class="cursor-on-hover text-darker"><i class="fa-solid fa-pen"></i></span>
+							<SnippetCreateEditForm id="modal-edit-form" :snippet="selectedSnippet"/>
+						</b-col>
+						<b-col cols="auto" class="p-1">
+							<span id="delete-btn" class="cursor-on-hover text-darker" @click="deleteSnippet(selectedSnippet.id)"><i class="fa-solid fa-trash"></i></span>
+						</b-col>
+					</b-row>
+					<b-row align-h="end" class="mt-3">
+						<b-button v-for="tag in selectedSnippet.tags" variant="outline-secondary" size="sm" class="rounded bg-light text-darker mr-1" :key="tag.id">
+							{{tag.name}}
+						</b-button>
+					</b-row>
+				</b-col>
+			</b-row>
+			
+			<b-row class="bg-white border-top border-bottom border-light-gray" align-h="between" align-v="stretch">
+				<b-col>
+					<b-row align-h="start" align-v="center">
+						<b-button id="share-btn" class="bg-white text-darker border-right border-top-0 border-bottom-0 border-left-0 border-gray">SHARE</b-button>
+						<a class="pl-2" href="https://snippets.cacher.io/snippet/d68ae74c3893665e7571">https://snippets.cacher.io/snippet/d68ae74c3893665e7571</a>
+					</b-row>
+				</b-col>
+		
+				<b-col cols="auto">
+					<b-row align-v="baseline">
+						<b-col id="btn-copy" class="cursor-on-hover text-darker p-1">
+							<i class="fa-solid fa-copy"></i>
+						</b-col>
+						<b-col id="btn-open-link" class="cursor-on-hover text-darker p-1 mr-3">
+							<i class="fa-solid fa-arrow-up-right-from-square"></i>
+						</b-col>
+					
+					</b-row>
+					
+				</b-col>
+			</b-row>
+			
+			<b-row>
+				<b-col class="bg-light p-3">
+					<b-row>
+						<b-col>
+							<template v-if="selectedSnippet.description">
+								<vue-markdown :source="selectedSnippet.description" :options="options"/>
+							</template>
+							<template v-else>{{selectedSnippet.title}}</template>
+							<!--{{selectedSnippet.description || selectedSnippet.title}}-->
+						</b-col>
+					</b-row>
+					<hr>
+					
+					<b-row class="mb-3">
+						<b-col>
+							<span class="text-darker">
+								Files
+							</span>
+							<b-badge pill variant="secondary rounded text-white">{{selectedSnippet.parts.length}}</b-badge>
+						</b-col>
+					</b-row>
+					
+					<b-row>
+						<b-col>
+							<b-card no-body>
+								<b-tabs card>
+									<b-tab :title="part.title" v-for="part in selectedSnippet.parts" :key="part.id">
+										<b-card-text>
+											<CodeHighlighter :code="part.content" :language="part.Language.name"/>
+										</b-card-text>
+									</b-tab>
+								</b-tabs>
+							</b-card>
+						</b-col>
+					</b-row>
+				</b-col>
+			</b-row>
+			
+			
 		</template>
 		<template v-else>
 			<b>Nothing to see here !</b>
 		</template>
-	</div>
+	</b-col>
 
 </template>
+<style lang="scss" scoped>
+	#share-btn {
+		box-shadow: none!important;
+	}
+	#guid {
+		font-size: 0.8em;
+	}
+	#share-btn:hover, #edit-btn:hover, #delete-btn:hover, #guid:hover, #btn-copy:hover, #btn-open-link:hover{
+		color: var(--black)!important;
+	}
+	#guid #copy-icon{
+		visibility: hidden;
+		color: var(--success)!important;
+	}
+	#guid:hover #copy-icon{
+		visibility: visible;
+	}
+	#btn-star:not(.active):hover{
+		color: var(--darker)!important;
+	}
+	a:hover{
+		text-decoration: none;
+	}
+</style>

@@ -19,28 +19,49 @@ export default {
 		};
 	},
 	data() {
-		return {}
+		return {
+			selectedTag: null,
+			selectedLanguage: null
+		}
 	},
 	methods: {
 		refresh(){
 			this.snippetStore.fetchSnippets();
 			this.tagStore.fetchTags();
 			this.languageStore.fetchLanguages();
+			this.selectedTag = null;
+			this.selectedLanguage = null;
 		},
 		displayAllSnippets(){
+			this.selectedTag = null;
+			this.selectedLanguage = null;
 			this.snippetStore.fetchSnippets();
 		},
 		filterByStarred(){
+			this.selectedTag = null;
+			this.selectedLanguage = null;
 			this.snippetStore.filterSnippetsByStarred();
 		},
 		filterByUnlabeled(){
+			this.selectedTag = null;
+			this.selectedLanguage = null;
 			this.snippetStore.filterSnippetsByUnlabeled();
 		},
 		filterByTag(tag){
+			this.selectedTag = tag.id;
+			this.selectedLanguage = null;
 			this.snippetStore.filterSnippetsByTag(tag);
 		},
 		filterByLanguage(language){
+			this.selectedTag = null;
+			this.selectedLanguage = language.id;
 			this.snippetStore.filterSnippetsByLanguage(language);
+		},
+		languageIsSelected(language){
+			return this.selectedLanguage == language.id;
+		},
+		tagIsSelected(tag){
+			return this.selectedTag == tag.id;
 		}
 	},
 	components: {
@@ -50,58 +71,85 @@ export default {
 </script>
 
 <template>
-	<div class="flex-shrink-0 p-3 bg-white" style="width: 280px;">
-		<div class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
-			<span class="fs-5 fw-semibold">Personnal Library</span>
-			<button @click="refresh">Refresh</button>
-			<b-button v-b-modal.modal-scrollable.modal-xl.modal-create-form>New snippet</b-button>
-			<SnippetCreateEditForm id="modal-create-form"/>
-		</div>
-		<ul class="list-unstyled ps-0">
-			<li class="mb-1">
-				<button class="btn align-items-center rounded" @click="displayAllSnippets">
-					All snippets
-					<b-badge pill variant="primary" class="rounded-pill">{{ snippetStore.getNbSnippets }}</b-badge>
-				</button>
+	<b-container class="p-3 bg-dark text-white" style="width: 280px; height: 100vh">
+		<b-row class="mt-1 mb-3">
+			<b-col>
+				<span class="fs-5 fw-semibold">Personnal Library</span>
+			</b-col>
+			<b-col cols="2">
+				<span id="refresh" @click="refresh" class="text-gray"><i class="fa-solid fa-arrow-rotate-right"></i></span>
+			</b-col>
+		</b-row>
+		
+		<b-row class="mb-3">
+			<b-col>
+				<b-button v-b-modal.modal-scrollable.modal-xl.modal-create-form block variant="success">New snippet</b-button>
+			</b-col>
+			
+		</b-row>
+		
+		<SnippetCreateEditForm id="modal-create-form"/>
+		
+		<ul class="col mb-4">
+			<li class="row pt-2 pb-2" @click="displayAllSnippets">
+				<b-col cols="1"><i class="fa-solid fa-list"></i></b-col>
+				<b-col cols="9">All snippets</b-col>
+				<b-col cols="1">{{ snippetStore.getNbSnippets }}</b-col>
 			</li>
-			<li class="mb-1">
-				<button class="btn align-items-center rounded" @click="filterByStarred">
-					Starred
-					<b-badge pill variant="primary" class="rounded-pill">{{ snippetStore.getNbStarred }}</b-badge>
-				</button>
+
+			<li class="row pt-2 pb-2" @click="filterByStarred">
+				<b-col cols="1"><i class="fa-solid fa-star"></i></b-col>
+				<b-col cols="9">Starred</b-col>
+				<b-col cols="1">{{ snippetStore.getNbStarred }}</b-col>
 			</li>
-			<li class="mb-1">
-				<button class="btn align-items-center rounded" @click="filterByUnlabeled">
-					Unlabeled
-					<b-badge pill variant="primary" class="rounded-pill">{{ snippetStore.getNbUnlabeled }}</b-badge>
-				</button>
-			</li>
-			<li class="mb-1">
-				<b-button v-b-toggle.collapse-tag class="btn-toggle">Tags</b-button>
-				<b-collapse id="collapse-tag" visible class="mt-2">
-					<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-						<li v-for="tag in tagStore.tags" :key="tag.id">
-							<a href="#" class="link-dark rounded" @click="filterByTag(tag.name)">
-								{{tag.name}}
-							</a>
-							<b-badge pill variant="primary" class="rounded-pill">{{ tag.nbSnippets }}</b-badge>
-						</li>
-					</ul>
-				</b-collapse>
-			</li>
-			<li class="mb-1">
-				<b-button v-b-toggle.collapse-language class="btn-toggle">Languages</b-button>
-				<b-collapse id="collapse-language" visible class="mt-2">
-					<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-						<li v-for="language in languageStore.languages" :key="language.id">
-							<a href="#" class="link-dark rounded" @click="filterByLanguage(language.name)">
-								{{language.name}}
-							</a>
-							<b-badge pill variant="primary" class="rounded-pill">{{ language.nbSnippets }}</b-badge>
-						</li>
-					</ul>
-				</b-collapse>
+			
+			<li class="row pt-2 pb-2" @click="filterByUnlabeled">
+				<b-col cols="1"><i class="fa-solid fa-tag"></i></b-col>
+				<b-col cols="9">Unlabeled</b-col>
+				<b-col cols="1">{{ snippetStore.getNbUnlabeled }}</b-col>
 			</li>
 		</ul>
-	</div>
+
+		<div class="text-secondary uppercase mt-3">Tags</div>
+		
+		<ul id="tags" class="col mb-4">
+			<li class="row pt-1 pb-1" v-for="tag in tagStore.tags" v-bind:class="{ selected: tagIsSelected(tag) }" :key="tag.id" @click="filterByTag(tag)">
+				<b-col cols="10">{{ tag.name }}</b-col>
+				<b-col cols="1">{{ tag.nbSnippets }}</b-col>
+			</li>
+		</ul>
+
+		<div class="text-secondary uppercase mt-3">Languages</div>
+		
+		<ul id="languages" class="col">
+			<li class="row pt-1 pb-1" v-for="language in languageStore.languages" v-bind:class="{ selected: languageIsSelected(language) }" :key="language.id" @click="filterByLanguage(language)">
+				<b-col cols="10">{{ language.name }}</b-col>
+				<b-col cols="1">{{ language.nbSnippets }}</b-col>
+			</li>
+		</ul>
+	</b-container>
 </template>
+<style lang="scss" scoped>
+	#refresh:hover>*{
+		color: #FFF;
+		cursor: pointer;
+	}
+	.uppercase {
+		text-transform: uppercase;
+	}
+	ul{
+		padding: 0;
+	}
+	ul li{
+		list-style: none;
+	}
+	ul li:hover{
+		background-color: #00141a;
+		cursor: pointer;
+	}
+	
+	.selected{
+		background-color: #00141a;
+		border-left: 3px solid var(--primary);
+	}
+</style>

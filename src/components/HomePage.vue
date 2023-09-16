@@ -27,15 +27,19 @@ export default {
 </script>
 
 <template>
-	<b-row>
-		<SideNav/>
-		<SortByList/>
-		<div>
-			<b-row>
-				<SnippetSearch/>
-				<ProfileMenu/>
-			</b-row>
-			<SnippetSingle/>
-		</div>
-	</b-row>
+	<b-container fluid>
+		<b-row align-v="stretch">
+			<SideNav/>
+			<b-col>
+				<b-row>
+					<SnippetSearch/>
+					<ProfileMenu/>
+				</b-row>
+				<b-row class="p-0" align-v="stretch">
+					<SortByList/>
+					<SnippetSingle/>
+				</b-row>
+			</b-col>
+		</b-row>
+	</b-container>
 </template>

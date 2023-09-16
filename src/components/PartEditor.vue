@@ -1,5 +1,5 @@
 <script>
-import CodeMirrorEditor from './CodeMirrorEditor.vue';
+import CodeEditor from './CodeEditor.vue';
 import { languages } from "@codemirror/language-data";
 
 export default {
@@ -13,7 +13,7 @@ export default {
 		part : { type: Object, required: true}
 	},
 	components : {
-		CodeMirrorEditor
+		CodeEditor
 	},
 	watch: {
 		localPart: function() {
@@ -46,7 +46,6 @@ export default {
 }
 </script>
 <template>
-	<!--<input v-model="part.title">-->
 	<b-card no-body>
 		<template #header>
 			<form>
@@ -64,6 +63,6 @@ export default {
 				</b-row>
 			</form>
 		</template>
-		<CodeMirrorEditor :code="localPart.content" :language="localPart.language" @input="(newCode) => {localPart.content = newCode}"/>
+		<CodeEditor :code="localPart.content" :language="localPart.language" @input="(newCode) => {localPart.content = newCode}"/>
 	</b-card>
 </template>

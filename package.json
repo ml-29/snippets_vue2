@@ -10,6 +10,7 @@
     "production": "vue-cli-service build --mode production --port 8080"
   },
   "dependencies": {
+    "@babel/runtime": "^7.22.15",
     "@codemirror/language-data": "^6.1.0",
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
     "@fortawesome/free-brands-svg-icons": "^6.4.0",
@@ -23,10 +24,12 @@
     "core-js": "^3.8.3",
     "crypto-random-string": "^5.0.0",
     "dotenv-webpack": "^8.0.1",
+    "moment": "^2.29.4",
     "pinia": "^2.0.23",
     "sass": "^1.55.0",
     "vue": "^2.7.13",
     "vue-cookies": "^1.8.2",
+    "vue-markdown-render": "^2.0.1",
     "vue-router": "^3.6.5"
   },
   "devDependencies": {
@@ -39,7 +42,8 @@
     "@vue/cli-service": "^5.0.8",
     "eslint": "^7.32.0",
     "eslint-plugin-vue": "^8.0.3",
-    "sass-loader": "^13.1.0",
+    "node-sass": "^9.0.0",
+    "sass-loader": "^13.3.2",
     "vue-template-compiler": "^2.6.14",
     "webpack": "^5.74.0"
   },

@@ -1,4 +1,30 @@
 $enable-rounded: false;
+$enable-shadows: true;
+
+$theme-colors: (
+    "light":      #f3f3f3,
+    "dark":       #002b36,
+    "primary":    Teal,
+    "secondary":  #9FA6B2,
+    "info":       #54B4D3,
+    "success":    LightSeaGreen,
+    "warning":    #E4A11B,
+    "danger":     #DC4C64,
+    "gray":				#ccc,
+    "darker":			rgba(0, 0, 0, 0.6),
+    "yellow":			rgb(255, 210, 0)
+);
 
 @import 'bootstrap/scss/bootstrap.scss';
 @import 'bootstrap-vue/src/index.scss';
+
+$font-stack: Roboto, sans-serif;
+
+body {
+	overflow-x: hidden;
+}
+
+.cursor-on-hover:hover {
+	cursor: pointer
+}
+	

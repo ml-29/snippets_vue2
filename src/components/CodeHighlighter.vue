@@ -1,5 +1,7 @@
 <script>
-import {EditorView, basicSetup} from 'codemirror'
+import {basicSetup} from 'codemirror'
+import { EditorView } from "@codemirror/view"
+import { EditorState } from "@codemirror/state"
 import { languages } from "@codemirror/language-data"
 
 export default {
@@ -12,18 +14,11 @@ export default {
 		code: { type: String, required: false, default: '' },
 		language: { type: String, required: false, default: '' }
 	},
-	watch: {
-		language: function(){
-			this.initEditor();
-		}
-	},
 	methods: {
-		inputCode: function(){
-			this.$emit('input', this.editor.state.sliceDoc());
-		},
 		initEditor: function(){
 			var extensions = [
-				basicSetup
+				basicSetup,
+				EditorState.readOnly.of(true)
 			];
 			new Promise((resolve, reject) => {
 				var languageLoader = languages.find((l) => {
@@ -59,5 +54,10 @@ export default {
 </script>
 
 <template>
-	<div ref="editorWrapper" @keyup="inputCode"></div>
+	<div ref="editorWrapper"></div>
 </template>
+<style scoped>
+	input{
+		pointer-events: none;
+	}
+</style>

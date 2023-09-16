@@ -1,14 +1,17 @@
 <script>
 import { storeToRefs } from 'pinia'
 import { useSnippetStore } from '@/stores/snippet.js'
+import { useAccountStore } from '@/stores/account.js'
 
 export default {
 	setup(){
 		const snippetStore = useSnippetStore();
+		const accountStore = useAccountStore();
+		
 		const { selectedSnippet } = storeToRefs(snippetStore);
 		const { fetchSnippets } = useSnippetStore();
 		
-		return { snippetStore, selectedSnippet };
+		return { snippetStore, selectedSnippet, accountStore };
 	},
 	data() {
 		return {
@@ -18,6 +21,11 @@ export default {
 				'Title' : 'sortListByTitle'
 			},
 			selectedSortMethod: null
+		}
+	},
+	methods: {
+		setSortMethod(method){
+			this.selectedSortMethod = method;
 		}
 	},
 	created(){
@@ -32,28 +40,69 @@ export default {
 </script>
 
 <template>
-	<div id="sort-by-list-container" class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 380px;">
-		<!-- <a href="/" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
-		<span class="fs-5 fw-semibold">List group</span>
-		</a> -->
-		<div class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
-			<span class="fs-5 fw-semibold">Sort by </span>
-			<select v-model="selectedSortMethod">
-				<option v-for="(value, key) in sortMethods" :key="key">{{ key }}</option>
-			</select>
-		</div>
-
-		<div class="list-group list-group-flush border-bottom scrollarea">
-			<a v-for="snippet in sortedList" :key="snippet.id" href="#" class="list-group-item list-group-item-action py-3 lh-tight" :class="{ active: selectedSnippet && (snippet.id == selectedSnippet.id) }" aria-current="true" @click="selectedSnippet = snippet">
-				<div class="d-flex w-100 align-items-center justify-content-between">
-					<strong class="mb-1">{{snippet.title}}</strong>
-					<!-- <small>Wed</small> -->
-				</div>
-				<div class="col-10 mb-1 small">{{snippet.description}}</div>
-				<span v-for="tag in snippet.tags" :key="tag.id">
-					{{tag.name}}
-				</span>
-			</a>
-		</div>
-	</div>
+	<b-col cols="4" class="bg-light border-right border-right border-gray p-0">
+		<b-col class="p-0">
+			<b-dropdown id="sort-by-dropdown" size="sm" toggle-class="sort-by-btn border-0 bg-transparent shadow-none" :text="selectedSortMethod" class="m-md-2" no-caret>
+				<template #button-content>
+					{{selectedSortMethod}} <i class="fa-solid fa-chevron-down" style="font-size: 0.8em;"></i>
+				</template>
+				<b-dropdown-item-button v-for="(value, key) in sortMethods" :active="selectedSortMethod == key ? true : false" :key="key" @click="setSortMethod(key)">
+					{{ key }}
+				</b-dropdown-item-button>
+			</b-dropdown>
+		</b-col>
+		<b-list-group id="sort-by-list">
+			<b-list-group-item v-for="snippet in sortedList" :key="snippet.id" href="#" class="sort-by-list-item border-right-0 text-dark bg-white cursor-on-hover" :class="{ active: selectedSnippet && (snippet.id == selectedSnippet.id) }" aria-current="true" @click="selectedSnippet = snippet">
+				<b-row>
+					<b-col class="p-0" cols="auto" align-v="start">
+						<b-col v-if="snippet.starred" class="text-center text-yellow">
+							<i class="fa-solid fa-star"></i>
+						</b-col>
+						<b-col v-if="snippet.private" class="text-darker text-center">
+							<i class="fa-solid fa-lock"></i>
+						</b-col>
+						<b-col class="text-center" style="visibility: hidden;">
+							<i class="fa-solid fa-star"></i>
+						</b-col>
+					</b-col>
+					
+					<b-col class="p-0">
+						<strong class="mb-1">{{snippet.title}}</strong>
+						<p class="small">{{snippet.description || snippet.title }}</p>
+						<b-button v-for="tag in snippet.tags" variant="outline-secondary" size="sm" class="rounded bg-light text-darker mr-1" :key="tag.id">
+							{{tag.name}}
+						</b-button>
+					</b-col>
+					
+					<b-col class="p-0 pr-2" align-h="end" cols="auto">
+						<b-col class="p-0">
+							<b-avatar v-bind:src="accountStore.avatarUrl(snippet.User)" size="sm" :text="accountStore.initials(snippet.User)"></b-avatar>
+						</b-col>
+						<b-col class="p-0 text-center">
+							<small>{{snippet.createdAt | miniDateTimeAgo }}</small>
+						</b-col>
+					</b-col>
+				</b-row>
+				
+			</b-list-group-item>
+		</b-list-group>
+	</b-col>
 </template>
+<style lang="scss">
+	button#sort-by-dropdown__BV_toggle_{
+		color: var(--darker);
+	}
+	button#sort-by-dropdown__BV_toggle_:hover{
+		color: var(--black)!important;
+	}
+	.sort-by-list-item:hover{
+		background-color: var(--light)!important;
+	}
+	#sort-by-list .active{
+		background-color: var(--light)!important;
+		border-color: var(--gray);
+		border-left: 4px solid var(--success);
+		color: var(--black);
+		box-shadow: inset 0 2px 2px rgba(0,0,0,.1);
+	}
+</style>
