@@ -37,6 +37,10 @@ export default {
 		},
 		async copySnippetGUID(snippet){
 			await navigator.clipboard.writeText('guid:' + snippet.id);
+		},
+		openSnippetPage(snippet){
+			console.log('boop');
+			window.open("https://www.snippets.com/public/snippet/" + snippet.id, "_blank").focus();
 		}
 	}
 }
@@ -92,9 +96,12 @@ export default {
 			<b-row class="bg-white border-top border-bottom border-light-gray" align-h="between" align-v="stretch">
 				<b-col>
 					<b-row align-h="start" align-v="center">
-						<b-button id="share-btn" class="bg-white text-darker border-right border-top-0 border-bottom-0 border-left-0 border-gray">SHARE</b-button>
+						<b-button id="share-btn" class="bg-white text-darker border-right border-top-0 border-bottom-0 border-left-0 border-gray" @click="copySnippetURL(selectedSnippet)">SHARE</b-button>
 						<a class="pl-2" href="https://snippets.cacher.io/snippet/d68ae74c3893665e7571">https://snippets.cacher.io/snippet/d68ae74c3893665e7571</a>
 					</b-row>
+					<b-tooltip target="share-btn" delay="50" triggers="click">
+						Copied !
+					</b-tooltip>
 				</b-col>
 		
 				<b-col cols="auto">
@@ -105,9 +112,12 @@ export default {
 						<b-tooltip target="btn-copy" delay="50" triggers="click">
 							Copied !
 						</b-tooltip>
-						<b-col id="btn-open-link" class="cursor-on-hover text-darker p-1 mr-3">
+						<b-col id="btn-open-link" class="cursor-on-hover text-darker p-1 mr-3" @click="openSnippetPage(selectedSnippet)">
 							<i class="fa-solid fa-arrow-up-right-from-square"></i>
 						</b-col>
+						<b-tooltip target="btn-open-link" triggers="hover">
+							Open snippet page
+						</b-tooltip>
 					</b-row>
 				</b-col>
 				
