@@ -103,7 +103,6 @@ export default {
 						<b-col>
 							<VueMarked v-if="selectedSnippet.description">{{selectedSnippet.description}}</VueMarked>
 							<div class="mb-3" v-else>{{selectedSnippet.title}}</div>
-							<!--{{selectedSnippet.description || selectedSnippet.title}}-->
 						</b-col>
 					</b-row>
 					<hr class="mt-0">

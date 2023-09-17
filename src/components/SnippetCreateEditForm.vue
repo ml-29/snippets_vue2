@@ -139,7 +139,6 @@ export default {
 				</b-form-group>
 
 				<h2>Files</h2>
-				<!-- {{localSnippet.parts}} -->
 				<PartEditor v-for="(part, index) in localSnippet.parts" :key="index"
 					:part="part"
 					@input="(newPart) => {part = newPart}"
