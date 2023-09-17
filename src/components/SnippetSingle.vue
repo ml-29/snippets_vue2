@@ -6,6 +6,8 @@ import SnippetCreateEditForm from '@/components/SnippetCreateEditForm.vue'
 import CodeHighlighter from '@/components/CodeHighlighter.vue'
 import VueMarked from '@hrwg/vue-marked'
 
+import { library } from '@fortawesome/fontawesome-svg-core'
+
 export default {
 	components : {
 		SnippetCreateEditForm,
@@ -25,7 +27,10 @@ export default {
 			}
 		},
 		async toggleStarred(snippet){
-			var res = this.snippetStore.toggleStarred(snippet);
+			this.snippetStore.toggleStarred(snippet);
+		},
+		async togglePrivate(snippet){
+			this.snippetStore.togglePrivate(snippet);
 		}
 	}
 }
@@ -91,9 +96,20 @@ export default {
 						<b-col id="btn-open-link" class="cursor-on-hover text-darker p-1 mr-3">
 							<i class="fa-solid fa-arrow-up-right-from-square"></i>
 						</b-col>
-					
 					</b-row>
-					
+				</b-col>
+				
+				<b-col cols="auto" class="border-gray border-left pl-2">
+					<b-row align-v="baseline">
+						<b-col class="cursor-on-hover text-darker pt-1" @click="togglePrivate(selectedSnippet)">
+							<template v-if="selectedSnippet.private">
+								<font-awesome-icon :icon="['fas', 'lock']" /> PRIVATE
+							</template>
+							<template v-else>
+								<font-awesome-icon :icon="['fas', 'eye']" /> PUBLIC
+							</template>
+						</b-col>
+					</b-row>
 				</b-col>
 			</b-row>
 			

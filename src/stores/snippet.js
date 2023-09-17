@@ -83,18 +83,22 @@ export const useSnippetStore = defineStore('snippet', {
 			}
 		},
 		async toggleStarred(snippet){
-			console.log(snippet);
-			console.log(snippet.starred)
 			var s = snippet;
 			s.starred = !snippet.starred;
-			console.log(s.starred);
 			try{
-				var res = await this.createOrUpdateSnippet(s);
-				console.log('success');
-				console.log('result ' + res);
+				await this.createOrUpdateSnippet(s);
 				return true
 			}catch{
-				console.log('error');
+				return false;
+			}
+		},
+		async togglePrivate(snippet){
+			var s = snippet;
+			s.private = !snippet.private;
+			try{
+				await this.createOrUpdateSnippet(s);
+				return true
+			}catch{
 				return false;
 			}
 		},
