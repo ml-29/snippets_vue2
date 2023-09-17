@@ -9,9 +9,7 @@ export default {
 		const snippetStore = useSnippetStore();
 		const tagStore = useTagStore();
 		const languageStore = useLanguageStore();
-
-		// tagStore.fetchTags();
-		// languageStore.fetchLanguages();
+		
 		return {
 			snippetStore,
 			tagStore,
