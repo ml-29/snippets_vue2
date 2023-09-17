@@ -49,17 +49,24 @@ export default {
 	<b-card no-body>
 		<template #header>
 			<form>
-				<b-row>
-					<b-col sm="3">
-						<b-form-input v-model="localPart.title" required></b-form-input>
+				<b-row align-h="between">
+					<b-col>
+						<b-row>
+							<b-col sm="3">
+								<b-form-input v-model="localPart.title" required></b-form-input>
+							</b-col>
+							<b-col sm="3">
+								<b-form-select v-model="localPart.language">
+									<b-form-select-option value="">Plain Text</b-form-select-option>
+									<b-form-select-option v-for="l in editorLanguages" :key="l.name" :value="l.name">{{ l.name }}</b-form-select-option>
+								</b-form-select>
+							</b-col>
+						</b-row>
 					</b-col>
-					<b-col sm="3">
-						<b-form-select v-model="localPart.language">
-							<b-form-select-option value="">Plain Text</b-form-select-option>
-							<b-form-select-option v-for="l in editorLanguages" :key="l.name" :value="l.name">{{ l.name }}</b-form-select-option>
-						</b-form-select>
+					<b-col cols="auto" class="p-1 pr-3" @click="deletePart">
+						<span id="delete-btn" class="cursor-on-hover text-darker" @click="deleteSnippet(selectedSnippet.id)"><i class="fa-solid fa-trash"></i></span>
 					</b-col>
-					<button type="button" @click="deletePart">Delete</button>
+					<!--<button type="button" @click="deletePart">Delete</button>-->
 				</b-row>
 			</form>
 		</template>
