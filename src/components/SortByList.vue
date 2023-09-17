@@ -69,9 +69,12 @@ export default {
 					<b-col class="p-0">
 						<strong class="mb-1">{{snippet.title}}</strong>
 						<p class="small">{{snippet.description || snippet.title }}</p>
-						<b-button v-for="tag in snippet.tags" variant="outline-secondary" size="sm" class="rounded bg-light text-darker mr-1" :key="tag.id">
+						<b-button v-for="tag in snippet.tags" variant="outline-secondary" size="sm" class="no-hover rounded bg-light text-darker mr-1" :key="tag.id" style="cursor-events: none!important;">
 							{{tag.name}}
 						</b-button>
+						<!--<b-col v-for="tag in snippet.tags" cols="auto" class="rounded border-light bg-light text-darker p-1 mr-1" :key="tag.id" style="cursor-events: none!important;">-->
+						<!--	{{tag.name}}-->
+						<!--</b-col>-->
 					</b-col>
 					
 					<b-col class="p-0 pr-2" align-h="end" cols="auto">
@@ -104,5 +107,8 @@ export default {
 		border-left: 4px solid var(--success);
 		color: var(--black);
 		box-shadow: inset 0 2px 2px rgba(0,0,0,.1);
+	}
+	button.no-hover.bg-light:hover{
+		background-color: var(--light)!important;
 	}
 </style>
