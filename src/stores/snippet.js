@@ -59,6 +59,14 @@ export const useSnippetStore = defineStore('snippet', {
 				return false;
 			}
 		},
+		async fetchSnippet(id) {
+			try{
+				var response = await Vue.prototype.$http.get('/snippet/' + id);
+				return response.data;
+			}catch{
+				return false;
+			}
+		},
 		async createOrUpdateSnippet(snippet){
 			try{
 				if(snippet.id){

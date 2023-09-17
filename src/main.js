@@ -74,6 +74,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon)
 import LoginPage from './components/LoginPage.vue'
 import NotFoundPage from './components/NotFoundPage.vue'
 import HomePage from './components/HomePage.vue'
+import PublicSnippet from './components/PublicSnippet.vue'
 
 import { useAccountStore } from '@/stores/account.js'
 
@@ -95,6 +96,7 @@ const routes = [
 			}
 		}
 	},
+	{ name: 'public', path: '/public/snippet/:id', component: PublicSnippet },
   { name: 'login', path: '/login', component: LoginPage,
 			beforeEnter: async(to, from, next) => {
 				var accountStore = useAccountStore();
