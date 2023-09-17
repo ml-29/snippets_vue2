@@ -31,6 +31,12 @@ export default {
 		},
 		async togglePrivate(snippet){
 			this.snippetStore.togglePrivate(snippet);
+		},
+		async copySnippetURL(snippet){
+			await navigator.clipboard.writeText('http://snippets.com/snippet/' + snippet.id);
+		},
+		async copySnippetGUID(snippet){
+			await navigator.clipboard.writeText('guid:' + snippet.id);
 		}
 	}
 }
@@ -53,10 +59,13 @@ export default {
 						
 						<b-col>
 							<b-row style="font-size: 1.2em;"><b>{{selectedSnippet.title}}</b></b-row>
-							<b-row id="guid" class="cursor-on-hover text-darker mb-2">
+							<b-row id="guid" class="cursor-on-hover text-darker mb-2" @click="copySnippetGUID(selectedSnippet)">
 								<b>guid : {{selectedSnippet.id}}</b>
 								&nbsp;<i id="copy-icon" class="fa-solid fa-copy"></i>
 							</b-row>
+							<b-tooltip target="guid" triggers="hover" noninteractive>
+								Click to copy ID
+							</b-tooltip>
 							<b-row style="font-size: 0.8em;"><b>{{selectedSnippet.User.username}}</b><span class="cursor-on-hover text-darker">&nbsp;- {{selectedSnippet.createdAt | completeDateHour }}</span></b-row>
 						</b-col>
 					</b-row>
@@ -90,9 +99,12 @@ export default {
 		
 				<b-col cols="auto">
 					<b-row align-v="baseline">
-						<b-col id="btn-copy" class="cursor-on-hover text-darker p-1">
+						<b-col id="btn-copy" class="cursor-on-hover text-darker p-1" @click="copySnippetURL(selectedSnippet)">
 							<i class="fa-solid fa-copy"></i>
 						</b-col>
+						<b-tooltip target="btn-copy" delay="50" triggers="click">
+							Copied !
+						</b-tooltip>
 						<b-col id="btn-open-link" class="cursor-on-hover text-darker p-1 mr-3">
 							<i class="fa-solid fa-arrow-up-right-from-square"></i>
 						</b-col>
