@@ -60,7 +60,23 @@ export default {
 		},
 		async handleSubmit(){
 			var success = false;
-			success = await this.snippetStore.createOrUpdateSnippet(this.localSnippet);
+			var s = structuredClone(this.localSnippet);
+			
+			s.tags = s.tags.map((t)=>{
+				return { name : t }
+			});
+			
+			s.parts = s.parts.map((p)=>{
+				var pp = structuredClone(p);
+				
+				pp.Language = { name: pp.language };
+				pp.language = undefined;
+				return pp;
+			});
+			
+			console.log(s);
+			
+			success = await this.snippetStore.createOrUpdateSnippet(s);
 			if(success){//if the snippet was successfully added, close the form and reset its data
 				this.closeForm();
 			}
