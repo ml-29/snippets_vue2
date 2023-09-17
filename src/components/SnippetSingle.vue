@@ -4,13 +4,13 @@ import { useSnippetStore } from '@/stores/snippet.js';
 
 import SnippetCreateEditForm from '@/components/SnippetCreateEditForm.vue'
 import CodeHighlighter from '@/components/CodeHighlighter.vue'
-import VueMarkdown from 'vue-markdown-render'
+import VueMarked from '@hrwg/vue-marked'
 
 export default {
 	components : {
 		SnippetCreateEditForm,
 		CodeHighlighter,
-		VueMarkdown
+		VueMarked
 	},
 	setup(){
 		const snippetStore = useSnippetStore();
@@ -101,14 +101,12 @@ export default {
 				<b-col class="bg-light p-3">
 					<b-row>
 						<b-col>
-							<template v-if="selectedSnippet.description">
-								<vue-markdown :source="selectedSnippet.description" :options="options"/>
-							</template>
-							<template v-else>{{selectedSnippet.title}}</template>
+							<VueMarked v-if="selectedSnippet.description">{{selectedSnippet.description}}</VueMarked>
+							<div class="mb-3" v-else>{{selectedSnippet.title}}</div>
 							<!--{{selectedSnippet.description || selectedSnippet.title}}-->
 						</b-col>
 					</b-row>
-					<hr>
+					<hr class="mt-0">
 					
 					<b-row class="mb-3">
 						<b-col>

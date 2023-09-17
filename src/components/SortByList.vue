@@ -3,6 +3,8 @@ import { storeToRefs } from 'pinia'
 import { useSnippetStore } from '@/stores/snippet.js'
 import { useAccountStore } from '@/stores/account.js'
 
+import VueMarked from '@hrwg/vue-marked'
+
 export default {
 	setup(){
 		const snippetStore = useSnippetStore();
@@ -12,6 +14,9 @@ export default {
 		const { fetchSnippets } = useSnippetStore();
 		
 		return { snippetStore, selectedSnippet, accountStore };
+	},
+	components : {
+		VueMarked
 	},
 	data() {
 		return {
@@ -68,7 +73,10 @@ export default {
 					
 					<b-col class="p-0">
 						<strong class="mb-1">{{snippet.title}}</strong>
-						<p class="small">{{snippet.description || snippet.title }}</p>
+						
+						<VueMarked v-if="snippet.description" class="small">{{snippet.description}}</VueMarked>
+						<p v-else class="small">{{snippet.title}}</p>
+						
 						<b-button v-for="tag in snippet.tags" variant="outline-secondary" size="sm" class="no-hover rounded bg-light text-darker mr-1" :key="tag.id" style="cursor-events: none!important;">
 							{{tag.name}}
 						</b-button>

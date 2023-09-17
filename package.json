@@ -17,6 +17,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.4.0",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
     "@fortawesome/vue-fontawesome": "^2.0.10",
+    "@hrwg/vue-marked": "^0.0.2",
     "axios": "^1.1.3",
     "bootstrap": "^4.6.2",
     "bootstrap-vue": "^2.22.0",
@@ -29,7 +30,6 @@
     "sass": "^1.55.0",
     "vue": "^2.7.13",
     "vue-cookies": "^1.8.2",
-    "vue-markdown-render": "^2.0.1",
     "vue-router": "^3.6.5"
   },
   "devDependencies": {
