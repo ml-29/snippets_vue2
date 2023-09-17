@@ -23,6 +23,9 @@ export default {
 			if(res){//if the snippet was successfully added, close the form and reset its data
 				this.selectedSnippet.value = null;
 			}
+		},
+		async toggleStarred(snippet){
+			var res = this.snippetStore.toggleStarred(snippet);
 		}
 	}
 }
@@ -35,7 +38,7 @@ export default {
 				<b-col cols="auto">
 					<b-row>
 						<b-col cols="auto" class="p-0 pr-3">
-							<b-col id="btn-star" class="text-gray cursor-on-hover text-center" :class="{ 'text-yellow' : selectedSnippet.starred }">
+							<b-col id="btn-star" class="text-gray cursor-on-hover text-center" :class="{ 'text-yellow' : selectedSnippet.starred }" @click="toggleStarred(selectedSnippet)">
 								<i class="fa-solid fa-star"></i>
 							</b-col>
 							<b-col v-if="selectedSnippet.private" class="text-darker text-center">
@@ -157,7 +160,7 @@ export default {
 	#guid:hover #copy-icon{
 		visibility: visible;
 	}
-	#btn-star:not(.active):hover{
+	#btn-star:not(.active):not(.text-yellow):hover{
 		color: var(--darker)!important;
 	}
 	a:hover{

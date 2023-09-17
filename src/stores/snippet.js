@@ -82,6 +82,22 @@ export const useSnippetStore = defineStore('snippet', {
 				return false;
 			}
 		},
+		async toggleStarred(snippet){
+			console.log(snippet);
+			console.log(snippet.starred)
+			var s = snippet;
+			s.starred = !snippet.starred;
+			console.log(s.starred);
+			try{
+				var res = await this.createOrUpdateSnippet(s);
+				console.log('success');
+				console.log('result ' + res);
+				return true
+			}catch{
+				console.log('error');
+				return false;
+			}
+		},
 		resetSnippets(){
 			this.snippets = [];
 			this.list = [];
