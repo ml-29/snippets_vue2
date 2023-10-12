@@ -25,7 +25,7 @@ export default {
 </script>
 
 <template>
-	<b-container fluid>
+	<b-container class="bg-light" fluid>
 		<h1>{{snippet}}</h1>
 		<div v-if="snippet">
 			{{snippet}}

@@ -36,3 +36,4 @@ pnpm-debug.log*
 .vs/slnx.sqlite
 .vs/slnx.sqlite-journal
 package-lock.json
+.env.production
