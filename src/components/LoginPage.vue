@@ -19,6 +19,7 @@ export default {
 	},
 	data() {
 		return {
+			tabIndex: 0,
 			// login form fields
 			loginUsername: process.env.VUE_APP_DEFAULT_USERNAME || '',
 			loginPassword: process.env.VUE_APP_DEFAULT_PASSWORD || '',
@@ -90,8 +91,8 @@ export default {
 <template>
 	<section class="sticky">
 		<b-modal id="sign-in-modal" body-class="p-0" ref="modal" no-close-on-backdrop hide-backdrop centered hide-footer hide-header>
-		<b-tabs content-class="mt-3" fill>
-			<b-tab title="Sign in" class="p-3" title-link-class="p-3" active>
+		<b-tabs content-class="mt-3" v-model="tabIndex" fill>
+			<b-tab title="Sign in" class="p-3" title-link-class="p-3">
 				<div class="d-block text-center mb-3">
 					<h3>Sign in with email</h3>
 				</div>
@@ -148,7 +149,7 @@ export default {
 					</b-row>
 					
 					<b-row align-h="center" class="pt-3 pb-0">
-						<p class="text-center mt-2 w-75">Don't have an account? <a href="#">Sign up</a></p>
+						<p class="text-center mt-2 w-75">Don't have an account? <a href="#" @click="tabIndex = 1">Sign up</a></p>
 					</b-row>
 					
 				</b-form>
