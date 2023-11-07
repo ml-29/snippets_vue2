@@ -6,6 +6,8 @@ import { useLanguageStore } from '@/stores/language.js'
 
 import $ from 'jquery'
 
+import { library } from '@fortawesome/fontawesome-svg-core'
+
 export default {
 	setup(){
 		const accountStore = useAccountStore();
@@ -22,13 +24,15 @@ export default {
 			loginPassword: process.env.VUE_APP_DEFAULT_PASSWORD || '',
 			loginRememberMe: false,
 			loginError: false,
+			loginShowPassword: false,
 			
 			// signup form fields
 			signUpEmail: process.env.VUE_APP_DEFAULT_SIGNUP_EMAIL || '',
 			signUpUsername: process.env.VUE_APP_DEFAULT_SIGNUP_USERNAME || '',
 			signUpPassword: process.env.VUE_APP_DEFAULT_SIGNUP_PASSWORD || '',
 			signUpRememberMe: false,
-			signUpError: false
+			signUpError: false,
+			signUpShowPassword: false
 		}
 	},
 	mounted(){
@@ -113,7 +117,13 @@ export default {
 									<i class="fa-solid fa-lock"></i>
 								</span>
 							</b-input-group-prepend>
-							<b-form-input class="LoginInput" size="lg" placeholder="Password" type="password" v-model="loginPassword" required></b-form-input>
+							<b-form-input class="LoginInput" size="lg" placeholder="Password" :type="loginShowPassword ? 'text' : 'password'" v-model="loginPassword" required></b-form-input>
+							<b-input-group-append class="cursor-on-hover">
+								<span class="input-group-text bg-white" @click="loginShowPassword = !loginShowPassword">
+									<font-awesome-icon v-if="loginShowPassword" :icon="['fas', 'eye']"/>
+									<font-awesome-icon v-else :icon="['fas', 'eye-slash']"/>
+								</span>
+							</b-input-group-append>
 						</b-input-group>
 					</b-form-group>
 					
@@ -153,7 +163,7 @@ export default {
 					</b-button>
 				</b-row>
 				
-				<b-row class="pb-0" align-h="center">
+				<b-row class="pb-0" align-h="center" style="visibility: hidden;">
 					<p class="text-center mt-2 w-75">By creating this account you agree to our <a href="#">Privacy Policy</a> & <a href="#">Cookie Policy</a></p>
 				</b-row>
 			</b-tab>
@@ -200,10 +210,16 @@ export default {
 									<i class="fa-solid fa-lock"></i>
 								</span>
 							</b-input-group-prepend>
-							<b-form-input class="LoginInput" size="lg" placeholder="Password" type="password" v-model="signUpPassword"></b-form-input>
-								<b-form-invalid-feedback :state="signUpPasswordOk">
-									Password should be at least 8 characters long, include numbers, letters (upper and lower case) and at least one symbol among ~`!@#$%^&*()_\-+={[}]|\:;"'&lt;&gt;,.?/
-								</b-form-invalid-feedback>
+							<b-form-input class="LoginInput" size="lg" placeholder="Password" :type="signUpShowPassword ? 'text' : 'password'" v-model="signUpPassword"></b-form-input>
+							<b-input-group-append class="cursor-on-hover">
+								<span class="input-group-text bg-white" @click="signUpShowPassword = !signUpShowPassword">
+									<font-awesome-icon v-if="signUpShowPassword" :icon="['fas', 'eye']"/>
+									<font-awesome-icon v-else :icon="['fas', 'eye-slash']"/>
+								</span>
+							</b-input-group-append>
+							<b-form-invalid-feedback :state="signUpPasswordOk">
+								Password should be at least 8 characters long, include numbers, letters (upper and lower case) and at least one symbol among ~`!@#$%^&*()_\-+={[}]|\:;"'&lt;&gt;,.?/
+							</b-form-invalid-feedback>
 						</b-input-group>
 					</b-form-group>
 					
@@ -237,7 +253,7 @@ export default {
 					</b-button>
 				</b-row>
 				
-				<b-row class="pb-0" align-h="center">
+				<b-row class="pb-0" align-h="center" style="visibility: hidden;">
 					<p class="text-center mt-2 w-75">By creating this account you agree to our <a href="#">Privacy Policy</a> & <a href="#">Cookie Policy</a></p>
 				</b-row>
 			</b-tab>
