@@ -18,6 +18,7 @@ export default {
 		initEditor: function(){
 			var extensions = [
 				basicSetup,
+				EditorView.lineWrapping,
 				EditorState.readOnly.of(true)
 			];
 			new Promise((resolve, reject) => {
