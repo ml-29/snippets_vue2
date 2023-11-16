@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { useGlobalStore } from '@/stores/global.js'
+import { useMessageStore } from '@/stores/message.js'
 import cryptoRandomString from 'crypto-random-string'
 import Vue from 'vue'
 
@@ -9,6 +10,7 @@ export const useAccountStore = defineStore('account', {
 			user: {},
 			loggedIn: false,
 			globalStore: useGlobalStore(),
+			messageStore: useMessageStore(),
 			// githubState: Vue.prototype.$cookies.get("state") || null,
 			githubClientId: process.env.VUE_APP_GITHUB_CLIENT_ID,
 			githubRedirectURI: process.env.VUE_APP_GITHUB_REDIRECT_URI,
@@ -29,8 +31,10 @@ export const useAccountStore = defineStore('account', {
 				var response = await Vue.prototype.$http.get('/user');
 				this.user = response.data.user;
 				this.loggedIn = true;
+				this.messageStore.debug('Account fetched');
 				return true;
-			}catch{
+			}catch(error){
+				this.messageStore.debug(error);
 				return false;
 			}
 		},
@@ -48,8 +52,11 @@ export const useAccountStore = defineStore('account', {
 				this.loggedIn = true;
 				this.propagateToken(response.data.token, rememberMe);
 				this.globalStore.refreshAppData();
+				this.messageStore.debug('Logged in with password');
 				return true;
 			}catch(error){
+				this.messageStore.debug(error);
+				this.messageStore.error('Could not log in');
 				this.globalStore.resetAppData();
 				return false;
 			}
@@ -65,8 +72,11 @@ export const useAccountStore = defineStore('account', {
 				this.loggedIn = true;
 				this.propagateToken(response.data.token, rememberMe);
 				this.globalStore.refreshAppData();
+				this.messageStore.debug('Signed up with password');
 				return true;
 			}catch(error){
+				this.messageStore.debug(error);
+				this.messageStore.error('Could not sign up');
 				this.globalStore.resetAppData();
 				return false;
 			}
@@ -79,10 +89,12 @@ export const useAccountStore = defineStore('account', {
 				Vue.prototype.$http.defaults.params = { token: undefined };
 				sessionStorage.removeItem("token");
 				Vue.prototype.$cookies.remove("token");
-				
 				this.globalStore.resetAppData();
+				this.messageStore.debug('Logged out');
 				return true;
-			}catch{
+			}catch(error){
+				this.messageStore.debug(error);
+				this.messageStore.error('Could not log out');
 				return false;
 			}
 		},
@@ -95,12 +107,17 @@ export const useAccountStore = defineStore('account', {
 					this.propagateToken(response.data.token, true);
 
 					this.globalStore.refreshAppData();
+					
+					this.messageStore.debug('Logged in with Github');
 					return true;
-				}catch{
+				}catch(error){
+					this.messageStore.debug(error);
+					this.messageStore.error('Could not log in with Github');
 					this.globalStore.resetAppData();
 					return false;
 				}
 			}else{
+				this.messageStore.debug('Unable to log in with github due to bad code or unmatched state');
 				return false;
 			}
 		},
@@ -110,8 +127,10 @@ export const useAccountStore = defineStore('account', {
 			if(token){
 				this.propagateToken(token, false);
 				var res = await this.fetchAccount();
+				this.messageStore.debug('User is authenticated');
 				return res;
 			}
+			this.messageStore.debug('User is not authenticated');
 			return false;
 		}
 	},

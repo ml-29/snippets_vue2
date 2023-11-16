@@ -1,12 +1,13 @@
 import { defineStore } from 'pinia'
-// import axios from 'axios'
+import { useMessageStore } from '@/stores/message.js'
 import Vue from 'vue'
 
 export const useSnippetStore = defineStore('snippet', {
 	state: () => ({
 		snippets : [],
 		list : [],//what's left of the snippet list once filtered by search, can be sorted with the getters
-		selectedSnippet: null
+		selectedSnippet: null,
+		messageStore: useMessageStore()
 	}),
 	getters: {
 		getFilteredAndSortedList: (state) => {
@@ -54,16 +55,20 @@ export const useSnippetStore = defineStore('snippet', {
 				var response = await Vue.prototype.$http.get('/snippets');
 				this.snippets = response.data;
 				this.list = response.data;
+				this.messageStore.debug('Snippets have been fetched');
 				return true;
 			}catch{
+				this.messageStore.debug('Unable to fetch snippets');
 				return false;
 			}
 		},
 		async fetchSnippet(id) {
 			try{
 				var response = await Vue.prototype.$http.get('/snippet/' + id);
+				this.messageStore.debug('Snippet has been fetched');
 				return response.data;
 			}catch{
+				this.messageStore.debug('Unable to fetch snippet');
 				return false;
 			}
 		},
@@ -75,8 +80,10 @@ export const useSnippetStore = defineStore('snippet', {
 					await Vue.prototype.$http.post('/snippet', snippet);
 				}
 				this.fetchSnippets();
+				this.messageStore.debug('Snippet has been created or updated');
 				return true;
 			}catch{
+				this.messageStore.debug('Unable to update or create snippet');
 				return false;
 			}
 		},
@@ -85,8 +92,10 @@ export const useSnippetStore = defineStore('snippet', {
 				await Vue.prototype.$http.delete('/snippet/' + id);
 				this.fetchSnippets();
 				this.selectedSnippet = null;
+				this.messageStore.debug('Snippet has been deleted');
 				return true;
 			}catch{
+				this.messageStore.debug('Unable to delete snippet');
 				return false;
 			}
 		},
@@ -95,8 +104,10 @@ export const useSnippetStore = defineStore('snippet', {
 			s.starred = !snippet.starred;
 			try{
 				await this.createOrUpdateSnippet(s);
+				this.messageStore.debug('Snippet has been starred');
 				return true
 			}catch{
+				this.messageStore.debug('Unble to star snippet');
 				return false;
 			}
 		},
@@ -105,8 +116,10 @@ export const useSnippetStore = defineStore('snippet', {
 			s.private = !snippet.private;
 			try{
 				await this.createOrUpdateSnippet(s);
+				this.messageStore.debug('Snippet privacy mode has been toggled');
 				return true
 			}catch{
+				this.messageStore.debug('Unable to toggle snippet privacy mode');
 				return false;
 			}
 		},
@@ -114,6 +127,7 @@ export const useSnippetStore = defineStore('snippet', {
 			this.snippets = [];
 			this.list = [];
 			this.selectedSnippet = null;
+			this.messageStore.debug('Snippets have been reset');
 		},
 		searchSnippets(s){
 			this.list = this.snippets;
