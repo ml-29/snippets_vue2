@@ -5,21 +5,18 @@ export const useMessageStore = defineStore('message', {
 		messages : []
 	}),
 	getters: {
-		getMessages: function(state){
-			if(process.env.NODE_ENV != 'development'){
-				return state.messages.filter((m) => {
-					return !m.debug;
-				});
-			}
+		getMessages: (state) => {
 			return state.messages;
-		}
+		},
 	},
 	actions: {
 		error(message){
 			this.messages.push({ error : message });
 		},
 		debug(message){
-			this.debug.push({ debug : message });
+			if(process.env.NODE_ENV == 'development'){
+				console.log('-- DEBUG -- : ' + message);
+			}
 		}
 	}
 })
