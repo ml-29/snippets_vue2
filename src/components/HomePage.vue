@@ -29,7 +29,7 @@ export default {
 </script>
 
 <template>
-	<b-container fluid>
+	<b-container fluid style="overflow-y: hidden; height: 100vh;">
 		<MessagePopUps></MessagePopUps>
 		<b-row align-v="stretch">
 			<SideNav/>
