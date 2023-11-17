@@ -10,6 +10,12 @@ export const useSnippetStore = defineStore('snippet', {
 		messageStore: useMessageStore()
 	}),
 	getters: {
+		getSnippetPublicLink: (state) => {
+			if(state.selectedSnippet){
+				return process.env.VUE_APP_URL + '/public/snippet/' + state.selectedSnippet.id;
+			}
+			return '';
+		},
 		getFilteredAndSortedList: (state) => {
 			//TODO
 		},
