@@ -3,7 +3,8 @@ import { storeToRefs } from 'pinia';
 import { useSnippetStore } from '@/stores/snippet.js';
 
 import SnippetCreateEditForm from '@/components/SnippetCreateEditForm.vue'
-import CodeHighlighter from '@/components/CodeHighlighter.vue'
+// import CodeHighlighter from '@/components/CodeHighlighter.vue'
+import AceEditor from '@/components/AceEditor.vue'
 import VueMarked from '@hrwg/vue-marked'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -11,7 +12,8 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 export default {
 	components : {
 		SnippetCreateEditForm,
-		CodeHighlighter,
+		// CodeHighlighter,
+		AceEditor,
 		VueMarked
 	},
 	setup(){
@@ -160,7 +162,8 @@ export default {
 								<b-tabs card>
 									<b-tab :title="part.title" v-for="part in selectedSnippet.parts" :key="part.id">
 										<b-card-text>
-											<CodeHighlighter :code="part.content" :language="part.Language.name"/>
+											<AceEditor :code="part.content" :language="part.Language.name" read-only/>
+											<!--<CodeHighlighter :code="part.content" :language="part.Language.name"/>-->
 										</b-card-text>
 									</b-tab>
 								</b-tabs>
