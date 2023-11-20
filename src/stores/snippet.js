@@ -16,6 +16,12 @@ export const useSnippetStore = defineStore('snippet', {
 			}
 			return '';
 		},
+		getSnippetRelativePublicLink: (state) => {
+			if(state.selectedSnippet){
+				return '/public/snippet/' + state.selectedSnippet.id;
+			}
+			return '';
+		},
 		getFilteredAndSortedList: (state) => {
 			//TODO
 		},

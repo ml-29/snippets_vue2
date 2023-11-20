@@ -98,7 +98,7 @@ export default {
 				<b-col>
 					<b-row align-h="start" align-v="center">
 						<b-button id="share-btn" class="bg-white text-darker border-right border-top-0 border-bottom-0 border-left-0 border-gray" @click="copySnippetURL">SHARE</b-button>
-						<a class="pl-2" href="snippetStore.getSnippetPublicLink">{{ snippetStore.getSnippetPublicLink }}</a>
+						<a class="pl-2" :href="snippetStore.getSnippetRelativePublicLink">{{ snippetStore.getSnippetPublicLink }}</a>
 					</b-row>
 					<b-tooltip target="share-btn" delay="50" triggers="click">
 						Copied !
