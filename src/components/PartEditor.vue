@@ -1,5 +1,6 @@
 <script>
 import CodeEditor from './CodeEditor.vue';
+import AceEditor from './AceEditor.vue';
 import { languages } from "@codemirror/language-data";
 
 export default {
@@ -13,7 +14,7 @@ export default {
 		part : { type: Object, required: true}
 	},
 	components : {
-		CodeEditor
+		/*CodeEditor, */AceEditor
 	},
 	watch: {
 		localPart: function() {
@@ -70,6 +71,7 @@ export default {
 				</b-row>
 			</form>
 		</template>
-		<CodeEditor :code="localPart.content" :language="localPart.language" @input="(newCode) => {localPart.content = newCode}"/>
+		<AceEditor :code="localPart.content" :language="localPart.language" @input="(newCode) => {localPart.content = newCode}"></AceEditor>
+		<!--<CodeEditor :code="localPart.content" :language="localPart.language" @input="(newCode) => {localPart.content = newCode}"/>-->
 	</b-card>
 </template>
