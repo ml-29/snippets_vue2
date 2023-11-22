@@ -21,7 +21,7 @@ export default {
 						<i class="fa-solid fa-chevron-down"></i>
 					</span>
 				</template>
-				<b-dropdown-item href="#">See Profile</b-dropdown-item>
+				<!--<b-dropdown-item href="#">See Profile</b-dropdown-item>-->
 				<b-dropdown-item>
 					<router-link :to="'logout'">Log out</router-link>
 				</b-dropdown-item>
