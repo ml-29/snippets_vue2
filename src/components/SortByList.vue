@@ -10,10 +10,7 @@ export default {
 		const snippetStore = useSnippetStore();
 		const accountStore = useAccountStore();
 		
-		const { selectedSnippet } = storeToRefs(snippetStore);
-		const { fetchSnippets } = useSnippetStore();
-		
-		return { snippetStore, selectedSnippet, accountStore };
+		return { snippetStore, accountStore };
 	},
 	components : {
 		VueMarked
@@ -25,7 +22,8 @@ export default {
 				'Last Updated' : 'sortListByLastUpdated',
 				'Title' : 'sortListByTitle'
 			},
-			selectedSortMethod: null
+			selectedSortMethod: null,
+			selectedSnippet: this.snippetStore.selectedSnippet
 		}
 	},
 	methods: {
