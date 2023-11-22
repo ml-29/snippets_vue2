@@ -38,7 +38,7 @@ export default {
 					<SnippetSearch/>
 					<ProfileMenu/>
 				</b-row>
-				<b-row class="p-0" align-v="stretch">
+				<b-row class="h-100 p-0" align-v="stretch">
 					<SortByList/>
 					<SnippetSingle/>
 				</b-row>
