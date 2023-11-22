@@ -88,7 +88,11 @@ export default {
 				language : ''
 			});
 		},
-		deletePart(index){//removes a part of the snippet in the form
+		deletePart(id){//removes a part of the snippet in the form
+			console.log(JSON.stringify(this.localSnippet.parts));
+			console.log(id);
+			var index = this.localSnippet.parts.findIndex((p) => p.id == id);
+			console.log('deleting part at ' + index);
 			this.localSnippet.parts.splice(index, 1);
 		},
 		closeForm(){
@@ -139,10 +143,10 @@ export default {
 				</b-form-group>
 
 				<h2>Files</h2>
-				<PartEditor v-for="(part, index) in localSnippet.parts" :key="index"
+				<PartEditor v-for="part in localSnippet.parts" :key="part.id"
 					:part="part"
 					@input="(newPart) => {part = newPart}"
-					@deletePart="deletePart(index)"/>
+					@deletePart="deletePart"/>
 
 				<b-button @click="addPart">Add file</b-button>
 			</form>

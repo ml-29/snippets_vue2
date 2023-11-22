@@ -1,7 +1,7 @@
 <script>
 import { useSnippetStore } from '@/stores/snippet.js'
 import { useAccountStore } from '@/stores/account.js'
-import AceEditor from '@/components/AceEditor.vue'
+import CodeEditor from '@/components/CodeEditor.vue'
 
 export default {
 	setup(){
@@ -11,7 +11,7 @@ export default {
 		return { snippetStore, accountStore };
 	},
 	components: {
-		AceEditor
+		CodeEditor
 	},
 	data(){
 		return {
@@ -93,7 +93,7 @@ export default {
 							</b-row>
 						</template>
 						<b-card-body class="p-0">
-							<AceEditor :code="part.content" :language="part.Language.name" read-only/>
+							<CodeEditor :code="part.content" :language="part.Language.name" read-only/>
 						</b-card-body>
 					</b-card>
 				</div>

@@ -1,20 +1,24 @@
 <script>
 import CodeEditor from './CodeEditor.vue';
-import AceEditor from './AceEditor.vue';
-import { languages } from "@codemirror/language-data";
+import { useLanguageStore } from '@/stores/language.js';
 
 export default {
+	setup(){
+		const languageStore = useLanguageStore();
+		return { languageStore };
+	},
 	data(){
 		return {
-			editorLanguages: languages,
-			localPart: this.part
+			availableLanguages: this.languageStore.availableLanguages,
+			localPart: this.part,
+			langTest: ''
 		}
 	},
 	props : {
 		part : { type: Object, required: true}
 	},
 	components : {
-		/*CodeEditor, */AceEditor
+		CodeEditor
 	},
 	watch: {
 		localPart: function() {
@@ -25,23 +29,24 @@ export default {
 				this.localPart.language = this.editorLanguage;
 			}
 		},
-		'part.title': function(){
-			var nameParts = this.part.title.split('.');
-			var pluginRef = null;
-			if(nameParts.length >= 2){
-				var ext = nameParts.pop();
-				pluginRef = this.editorLanguages.find((l) => {
-					return l.extensions.includes(ext);
-				});
-			}
+		// 'part.title': function(){
+		// 	var nameParts = this.part.title.split('.');
+		// 	var pluginRef = null;
+		// 	if(nameParts.length >= 2){
+		// 		var ext = nameParts.pop();
+		// 		pluginRef = this.availableLanguages.find((l) => {
+		// 			return l.extensions.includes(ext);
+		// 		});
+		// 	}
 
-			var languagePluginName = pluginRef ? pluginRef.name : '';
+		// 	var languagePluginName = pluginRef ? pluginRef.name : '';
 
-			this.localPart.language = languagePluginName || this.localPart.language || '';
-		}
-	}, methods: {
-		deletePart(){
-			this.$emit('deletePart', this.part);
+		// 	this.localPart.language = languagePluginName || this.localPart.language || '';
+		// }
+	},
+	methods: {
+		deletePart(id){
+			this.$emit('deletePart', id);
 		}
 	}
 }
@@ -57,21 +62,21 @@ export default {
 								<b-form-input v-model="localPart.title" required></b-form-input>
 							</b-col>
 							<b-col sm="3">
-								<b-form-select v-model="localPart.language">
-									<b-form-select-option value="">Plain Text</b-form-select-option>
-									<b-form-select-option v-for="l in editorLanguages" :key="l.name" :value="l.name">{{ l.name }}</b-form-select-option>
+								<b-form-select v-model="localPart.Language">
+									<!--<b-form-select-option value="">Plain Text</b-form-select-option>-->
+									<b-form-select-option v-for="l in availableLanguages" :key="l.name" :value="l">{{ l.name }}</b-form-select-option>
 								</b-form-select>
 							</b-col>
 						</b-row>
 					</b-col>
-					<b-col cols="auto" class="p-1 pr-3" @click="deletePart">
-						<span id="delete-btn" class="cursor-on-hover text-darker" @click="deleteSnippet(selectedSnippet.id)"><i class="fa-solid fa-trash"></i></span>
+					<b-col cols="auto" class="p-1 pr-3">
+						<span id="delete-btn" class="cursor-on-hover text-darker" @click="deletePart(localPart.id)"><i class="fa-solid fa-trash"></i></span>
 					</b-col>
 					<!--<button type="button" @click="deletePart">Delete</button>-->
 				</b-row>
 			</form>
 		</template>
-		<AceEditor :code="localPart.content" :language="localPart.language" @input="(newCode) => {localPart.content = newCode}"></AceEditor>
+		<CodeEditor :code="localPart.content" :language="localPart.Language" @input="(newCode) => {localPart.content = newCode}"></CodeEditor>
 		<!--<CodeEditor :code="localPart.content" :language="localPart.language" @input="(newCode) => {localPart.content = newCode}"/>-->
 	</b-card>
 </template>
