@@ -24,11 +24,11 @@ export const useGlobalStore = defineStore('global', {
 			this.messageStore.debug('App data has been reset');
 			
 		},
-		refreshAppData(){
-			this.snippetStore.fetchSnippets();
-			this.tagStore.fetchTags();
-			this.languageStore.fetchLanguages();
-			this.accountStore.fetchAccount();
+		async refreshAppData(){
+			await this.snippetStore.fetchSnippets();
+			await this.tagStore.fetchTags();
+			await this.languageStore.fetchLanguages();
+			await this.accountStore.fetchAccount();
 			this.messageStore.debug('App data has been reset');
 		}
 	}

@@ -13,12 +13,10 @@ export const useLanguageStore = defineStore('language', {
 	actions: {
 		async fetchLanguages() {
 			try{
-				var response = await Vue.prototype.$http
-				.get('/used-languages');
+				var response = await Vue.prototype.$http.get('/used-languages');
 				this.languages = response.data;
 				
-				var r2 = await Vue.prototype.$http
-				.get('/languages');
+				var r2 = await Vue.prototype.$http.get('/languages');
 				this.availableLanguages = r2.data;
 				
 				this.messageStore.debug('Languages have been fetched');

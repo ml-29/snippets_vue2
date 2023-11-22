@@ -51,7 +51,7 @@ export const useAccountStore = defineStore('account', {
 				this.user = response.data.user;
 				this.loggedIn = true;
 				this.propagateToken(response.data.token, rememberMe);
-				this.globalStore.refreshAppData();
+				await this.globalStore.refreshAppData();
 				this.messageStore.debug('Logged in with password');
 				return true;
 			}catch(error){
@@ -71,7 +71,7 @@ export const useAccountStore = defineStore('account', {
 				this.user = response.data.user;
 				this.loggedIn = true;
 				this.propagateToken(response.data.token, rememberMe);
-				this.globalStore.refreshAppData();
+				await this.globalStore.refreshAppData();
 				this.messageStore.debug('Signed up with password');
 				return true;
 			}catch(error){
@@ -106,7 +106,7 @@ export const useAccountStore = defineStore('account', {
 					var response = await Vue.prototype.$http.post('/github-login', { code : code });
 					this.propagateToken(response.data.token, true);
 
-					this.globalStore.refreshAppData();
+					await this.globalStore.refreshAppData();
 					
 					this.messageStore.debug('Logged in with Github');
 					return true;
@@ -124,6 +124,7 @@ export const useAccountStore = defineStore('account', {
 		async isAuthenticated(){
 			//quick fix: token computed here instead of using a getter because getter is not always up to date, reason unknown
 			var token = Vue.prototype.$cookies.get("token") || sessionStorage.getItem("token") || null;
+			console.log(token);
 			if(token){
 				this.propagateToken(token, false);
 				var res = await this.fetchAccount();
@@ -145,7 +146,16 @@ export const useAccountStore = defineStore('account', {
 			return user.username || user.githubProfile.login;
 		},
 		initials: (state) => (user) => {
-			var names = user.username.split(' '), initials = names[0].substring(0, 1).toUpperCase();
+			//quickfix until able to call username getter here
+			var uname = '';
+			if(user.username){
+				uname = user.username;
+			}else if(user.githubProfile){
+				uname = user.githubProfile.login;
+			}
+			//quickfix END
+			
+			var names = uname.split(' '), initials = names[0].substring(0, 1).toUpperCase();
 			
 			if (names.length > 1) {
 				initials += names[names.length - 1].substring(0, 1).toUpperCase();
