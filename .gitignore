@@ -37,3 +37,7 @@ pnpm-debug.log*
 .vs/slnx.sqlite-journal
 package-lock.json
 .env.production
+src/components/AceEditor_old.vue
+src/components/CodeEditor_old.vue
+src/components/Modmod.vue
+src/stores/lang-mods.js
