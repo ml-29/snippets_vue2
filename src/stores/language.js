@@ -6,6 +6,7 @@ export const useLanguageStore = defineStore('language', {
 	state: () => {
 		return {
 			languages : [],
+			availableLanguages : [],
 			messageStore : useMessageStore()
 		}
 	},
@@ -13,8 +14,13 @@ export const useLanguageStore = defineStore('language', {
 		async fetchLanguages() {
 			try{
 				var response = await Vue.prototype.$http
-				.get('/languages');
+				.get('/used-languages');
 				this.languages = response.data;
+				
+				var r2 = await Vue.prototype.$http
+				.get('/languages');
+				this.availableLanguages = r2.data;
+				
 				this.messageStore.debug('Languages have been fetched');
 			}catch{
 				this.messageStore.debug('Unable to fetch languages');
@@ -23,6 +29,7 @@ export const useLanguageStore = defineStore('language', {
 		},
 		resetLanguages(){
 			this.languages = [];
+			this.availableLanguages = [];
 			this.messageStore.debug('Languages have been reset');
 		}
 	}
