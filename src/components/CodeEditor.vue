@@ -20,6 +20,11 @@ export default {
 		language: { type: Object, required: false, default: function(){ return { aceEditorMode : 'javascript'}; } },
 		readOnly: { type: Boolean, required: false, default: false }
 	},
+	watch: {
+		localCode: function(){
+			this.$emit('input', this.localCode);
+		}
+	},
 	methods: {
 		editorInit: function(){
 			require('brace/ext/language_tools')
