@@ -22,7 +22,6 @@ Vue.use(VueRouter)
 const pinia = createPinia()
 
 Axios.defaults.baseURL = process.env.VUE_APP_REST_API_URL;
-Axios.defaults.withCredentials = true;
 
 Vue.prototype.$http = Axios;
 
