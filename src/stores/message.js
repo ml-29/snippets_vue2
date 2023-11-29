@@ -14,7 +14,7 @@ export const useMessageStore = defineStore('message', {
 			this.messages.push({ error : message });
 		},
 		debug(message){
-			if(process.env.NODE_ENV == 'development'){
+			if(process.env.VUE_APP_DEBUG_LOGS_ON == 'development'){
 				console.log('-- DEBUG -- : ' + message);
 			}
 		}
