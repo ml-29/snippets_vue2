@@ -124,7 +124,6 @@ export const useAccountStore = defineStore('account', {
 		async isAuthenticated(){
 			//quick fix: token computed here instead of using a getter because getter is not always up to date, reason unknown
 			var token = Vue.prototype.$cookies.get("token") || sessionStorage.getItem("token") || null;
-			console.log(token);
 			if(token){
 				this.propagateToken(token, false);
 				var res = await this.fetchAccount();
