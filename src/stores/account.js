@@ -20,7 +20,7 @@ export const useAccountStore = defineStore('account', {
 	actions: {
 		//sets token as default param for all axios requests + saves it as a cookie if requested
 		propagateToken(token, rememberMe){
-			Vue.prototype.$http.defaults.params = { token: token };//save for axios to use with every request
+			Vue.prototype.$http.defaults.headers.common = { 'Authorization': 'Bearer '+ token };//save for axios to use with every request
 			sessionStorage.setItem("token", token);//save to session so conexion is not lost between pages
 			if(rememberMe){
 				Vue.prototype.$cookies.set("token", token);
@@ -85,8 +85,8 @@ export const useAccountStore = defineStore('account', {
 			try{
 				var response = await Vue.prototype.$http.post('/logout/' + this.user.id);
 				
-				//remove token from everywhere
-				Vue.prototype.$http.defaults.params = { token: undefined };
+				//remove token everywhere it's saved
+				delete Vue.prototype.$http.defaults.headers.common["Authorization"];
 				sessionStorage.removeItem("token");
 				Vue.prototype.$cookies.remove("token");
 				this.globalStore.resetAppData();
