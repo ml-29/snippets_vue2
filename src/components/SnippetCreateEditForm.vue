@@ -18,6 +18,13 @@ export default {
 		const snippetStore = useSnippetStore();
 		return { defaultSnippet, snippetStore };
 	},
+	computed: {
+		editing : function (){
+			console.log('check that this snippet has an idea when editing');
+			console.log(this.snippet);
+			return this.snippet.id != 0;
+		}
+	},
 	data() {
 		return {
 			formId: 'form' + this._uid,
@@ -110,7 +117,8 @@ export default {
 		@show="handleShowModal"
 		scrollable>
 		<template #modal-header>
-			<h5>New snippet</h5>
+			<h5 v-if="editing">Edit snippet</h5>
+			<h5 v-else>New snippet</h5>
 			<b-col sm="6">
 				<b-form-tags input-id="tags" v-model="localSnippet.tags" remove-on-delete></b-form-tags>
 			</b-col>
