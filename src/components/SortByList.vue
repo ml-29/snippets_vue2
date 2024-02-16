@@ -26,14 +26,19 @@ export default {
 			selectedSnippet: this.snippetStore.selectedSnippet
 		}
 	},
+	watch: {
+		selectedSnippet : function(){
+			this.snippetStore.selectedSnippet = this.selectedSnippet
+		}
+	},
 	methods: {
 		setSortMethod(method){
 			this.selectedSortMethod = method;
 		}
 	},
 	created(){
-    this.selectedSortMethod = Object.keys(this.sortMethods)[0];
-  },
+		this.selectedSortMethod = Object.keys(this.sortMethods)[0];
+	},
 	computed: {
 		sortedList(){
 			return this.snippetStore[this.sortMethods[this.selectedSortMethod]];
