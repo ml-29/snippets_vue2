@@ -22,17 +22,21 @@ export default {
 	},
 	watch: {
 		localCode: function(){
+			this.editorInit();
 			this.$emit('input', this.localCode);
+		}
+	},
+	computed : {
+		aceEditorMode : function(){
+			var mode = this.language.aceEditorMode;
+			require('brace/mode/' + mode);
+			return mode;
 		}
 	},
 	methods: {
 		editorInit: function(){
 			require('brace/ext/language_tools')
 			require('brace/theme/chrome')
-			
-			this.languageStore.availableLanguages.map((l) => {
-				require('brace/mode/' + l.aceEditorMode);
-			});
 			
 			if(this.readOnly){
 				this.$refs.editorElement.editor.setReadOnly(true);
@@ -44,6 +48,6 @@ export default {
 
 <template>
 	<div>
-		<editor ref="editorElement" @init="editorInit" v-model="localCode" :lang="language.aceEditorMode" theme="chrome" width="100%" height="100"></editor>
+		<editor ref="editorElement" @init="editorInit" v-model="localCode" :lang="aceEditorMode" theme="chrome" width="100%" height="100"></editor>
 	</div>
 </template>
