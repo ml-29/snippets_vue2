@@ -1,5 +1,6 @@
 <script>
 import { useSnippetStore } from '@/stores/snippet.js';
+import { useLanguageStore } from '@/stores/language.js';
 import PartEditor from './PartEditor.vue';
 
 export default {
@@ -7,29 +8,37 @@ export default {
 		PartEditor
 	},
 	setup(){
-		const defaultSnippet = {
-			id: 0,
-			title : "",
-			description : "",
-			tags : [],
-			starred : true,
-			parts : []
-		};
 		const snippetStore = useSnippetStore();
-		return { defaultSnippet, snippetStore };
+		const languageStore = useLanguageStore();
+		
+		return { languageStore, snippetStore };
 	},
 	computed: {
 		editing : function (){
-			console.log('check that this snippet has an idea when editing');
-			console.log(this.snippet);
 			return this.snippet.id != 0;
+		},
+		defaultPart : function(){//needs to be computed so language by default is up to date with store (it's empty when component is instanciated)
+			var p = {
+				title: '',
+				content : ""
+			};
+			p.Language = this.languageStore.defaultLanguage;
+			return p;
 		}
 	},
 	data() {
 		return {
 			formId: 'form' + this._uid,
 			modal: null,
-			localSnippet: {}
+			localSnippet: {},
+			defaultSnippet : {
+				id: 0,
+				title : "",
+				description : "",
+				tags : [],
+				starred : true,
+				parts : []
+			}
 		}
 	},
 	props: {
@@ -89,11 +98,7 @@ export default {
 			}
 		},
 		addPart(){//adds a part to the snippet in the form
-			this.localSnippet.parts.push({
-				title: '',
-				content : "",
-				language : ''
-			});
+			this.localSnippet.parts.push(this.defaultPart);
 		},
 		deletePart(id){//removes a part of the snippet in the form
 			console.log(JSON.stringify(this.localSnippet.parts));

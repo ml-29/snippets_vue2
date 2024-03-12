@@ -63,7 +63,6 @@ export default {
 							</b-col>
 							<b-col sm="3">
 								<b-form-select v-model="localPart.Language">
-									<!--<b-form-select-option value="">Plain Text</b-form-select-option>-->
 									<b-form-select-option v-for="l in availableLanguages" :key="l.name" :value="l">{{ l.name }}</b-form-select-option>
 								</b-form-select>
 							</b-col>

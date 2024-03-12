@@ -18,7 +18,7 @@ export const useLanguageStore = defineStore('language', {
 				
 				var r2 = await Vue.prototype.$http.get('/available-languages');
 				this.availableLanguages = r2.data;
-				
+
 				this.messageStore.debug('Languages have been fetched');
 			}catch{
 				this.messageStore.debug('Unable to fetch languages');
@@ -29,6 +29,11 @@ export const useLanguageStore = defineStore('language', {
 			this.languages = [];
 			this.availableLanguages = [];
 			this.messageStore.debug('Languages have been reset');
+		}
+	},
+	getters: {
+		defaultLanguage: (state) => {
+			return state.availableLanguages.find( (l) => l.name === 'Text');
 		}
 	}
 })
