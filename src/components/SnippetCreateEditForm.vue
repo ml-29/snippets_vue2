@@ -98,7 +98,7 @@ export default {
 			}
 		},
 		addPart(){//adds a part to the snippet in the form
-			this.localSnippet.parts.push(this.defaultPart);
+			this.localSnippet.parts.push(Object.assign({}, this.defaultPart));
 		},
 		deletePart(id){//removes a part of the snippet in the form
 			console.log(JSON.stringify(this.localSnippet.parts));
