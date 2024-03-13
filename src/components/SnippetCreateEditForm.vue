@@ -84,9 +84,6 @@ export default {
 			
 			s.parts = s.parts.map((p)=>{
 				var pp = structuredClone(p);
-				
-				pp.Language = { name: pp.language };
-				pp.language = undefined;
 				return pp;
 			});
 			
