@@ -29,20 +29,22 @@ export default {
 				this.localPart.language = this.editorLanguage;
 			}
 		},
-		// 'part.title': function(){
-		// 	var nameParts = this.part.title.split('.');
-		// 	var pluginRef = null;
-		// 	if(nameParts.length >= 2){
-		// 		var ext = nameParts.pop();
-		// 		pluginRef = this.availableLanguages.find((l) => {
-		// 			return l.extensions.includes(ext);
-		// 		});
-		// 	}
-
-		// 	var languagePluginName = pluginRef ? pluginRef.name : '';
-
-		// 	this.localPart.language = languagePluginName || this.localPart.language || '';
-		// }
+		'part.title': function(){
+			var nameParts = this.part.title.split('.');
+			// var pluginRef = null;
+			var matchingLanguage = null;
+			if(nameParts.length >= 2){//if part title has a file extension
+				var ext = nameParts.pop();//get extension
+				matchingLanguage = this.availableLanguages.find((l) => {
+					return l.Extensions.find((e) => {
+						return e.name == ext;
+					});
+				});
+				if(matchingLanguage){
+					this.localPart.Language = matchingLanguage;
+				}
+			}
+		}
 	},
 	methods: {
 		deletePart(id){
