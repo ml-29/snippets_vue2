@@ -37,14 +37,15 @@ export default {
 				description : "",
 				tags : [],
 				starred : true,
-				parts : []
+				parts : [],
+				private : false,
+				preview : ''
 			}
 		}
 	},
 	props: {
 		snippet : {type: Object, required: false,
 			default() { return {
-			id: 0,
 			title : "",
 			description : "",
 			tags : [],
