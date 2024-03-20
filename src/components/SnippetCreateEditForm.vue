@@ -88,8 +88,6 @@ export default {
 				return pp;
 			});
 			
-			console.log(s);
-			
 			success = await this.snippetStore.createOrUpdateSnippet(s);
 			if(success){//if the snippet was successfully added, close the form and reset its data
 				this.closeForm();
