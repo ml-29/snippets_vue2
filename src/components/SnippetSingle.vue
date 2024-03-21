@@ -159,7 +159,8 @@ export default {
 								<b-tabs card>
 									<b-tab :title="part.title" v-for="part in selectedSnippet.parts" :key="part.id">
 										<b-card-text>
-											<CodeEditor :code="part.content" :language="part.Language" read-only/>
+											<VueMarked v-if="part.Language.name == 'Markdown'" class="markdown-part">{{ part.content }}</VueMarked>
+											<CodeEditor v-else :code="part.content" :language="part.Language" read-only/>
 										</b-card-text>
 									</b-tab>
 								</b-tabs>
@@ -199,5 +200,13 @@ export default {
 	}
 	a:hover{
 		text-decoration: none;
+	}
+	.markdown-part,
+	.markdown-part::before,
+	.markdown-part::after,
+	.markdown-part *,
+	.markdown-part *::before,
+	.markdown-part *::after {
+		all: revert!important;
 	}
 </style>
