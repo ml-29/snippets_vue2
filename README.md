@@ -16,7 +16,7 @@ Ce projet Github inclut seulement le front. Le backend est un projet à part ent
 
 ## Preview / Aperçu
 
-<video src='./readme_files/demo.mp4' width=180></video>
+https://github.com/ml-29/snippets_vue2/assets/86920107/3afdf4ec-4c72-42b1-a345-3585aa110119
 
 ## Analysis / Analyse
 
