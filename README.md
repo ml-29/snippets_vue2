@@ -14,6 +14,9 @@ Ce projet Github inclut seulement le front. Le backend est un projet à part ent
 
 [API documentation](https://documenter.getpostman.com/view/17948969/2sA2xpS9AH)
 
+[NodeJS](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)
+[VueJS 2](https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vue.js&logoColor=4FC08D)
+
 ## Preview / Aperçu
 
 https://github.com/ml-29/snippets_vue2/assets/86920107/3afdf4ec-4c72-42b1-a345-3585aa110119
