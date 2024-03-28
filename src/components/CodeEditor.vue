@@ -48,6 +48,6 @@ export default {
 
 <template>
 	<div>
-		<editor ref="editorElement" @init="editorInit" v-model="localCode" :lang="aceEditorMode" theme="chrome" width="100%" height="100"></editor>
+		<editor ref="editorElement" @init="editorInit" v-model="localCode" :lang="aceEditorMode" theme="chrome" width="100%" height="300px"></editor>
 	</div>
 </template>
