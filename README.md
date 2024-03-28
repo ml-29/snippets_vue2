@@ -1,5 +1,8 @@
 # Snippets Vue 2
 
+![NodeJS](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)
+![VueJS 2](https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vue.js&logoColor=4FC08D)
+
 Snippets Vue 2 is a code snippets organizer where you can store and share your boilerplates or any relevant code examples.
 This Github project only includes the frontend. The backend is its own separate project.
 
@@ -13,9 +16,6 @@ Ce projet Github inclut seulement le front. Le backend est un projet à part ent
 [Backend project](https://github.com/ml-29/snippets-backend)
 
 [API documentation](https://documenter.getpostman.com/view/17948969/2sA2xpS9AH)
-
-[NodeJS](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)
-[VueJS 2](https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vue.js&logoColor=4FC08D)
 
 ## Preview / Aperçu
 
