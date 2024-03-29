@@ -11,7 +11,7 @@ This Github project only includes the frontend. The backend is its own separate 
 Snippets Vue 2 est un organiseur de code qui vous permet de stocker et partager vos boilerplates et autres exemples de code pertinents.
 Ce projet Github inclut seulement le front. Le backend est un projet à part entière.
 
-[Demo](https://ml29.com/snippets)
+[Demo](https://snippets.ml29.fr)
 
 [Backend project](https://github.com/ml-29/snippets-backend)
 
